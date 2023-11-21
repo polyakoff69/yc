@@ -391,6 +391,9 @@ public class SysFileOperation implements IFileOperation {
         if("*".equals(mask)){
             return fname;
         }
+        if(mask.startsWith("*")){
+            return fname+mask.substring(1);
+        }
         int l1 = fname.length();
         int l2 = mask.length();
         String ret = "";
