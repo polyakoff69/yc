@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/../JFX/javafx-sdk-20.0.2/lib/lib.iml" filepath="$PROJECT_DIR$/../JFX/javafx-sdk-20.0.2/lib/lib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pcom.iml" filepath="$PROJECT_DIR$/pcom.iml" />
+    </modules>
+  </component>
+</project>

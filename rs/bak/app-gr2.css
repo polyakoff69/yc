@@ -1,0 +1,145 @@
+.menu-bar {
+    -fx-font-size: 11;
+    -fx-font-family: "Segoe UI Semilight", "Ubuntu", Tahoma;
+    -fx-background-color: -fx-control;
+}
+
+/* .menu {
+    -fx-background-color: #123456;
+} */
+
+.menu:showing {
+    -fx-background-color: #123456;
+}
+.menu:hover {
+    -fx-background-color: #123456;
+}
+
+/* .menu .label {
+    -fx-background-color: #123456
+}
+
+.menu:showing .label {
+    -fx-background-color: #123456
+} */
+
+.menu-item:focused {
+    -fx-background-color: #123456;
+}
+
+.menu-item:focused .label {
+    -fx-background-color: #123456;
+}
+
+
+.tool-bar {
+    -fx-font-size: 11;
+    -fx-font-family: "Segoe UI Semilight", "Ubuntu", Tahoma;
+    -fx-background-color: -fx-control;
+}
+
+.tool-bar .button {
+    -fx-background-color: transparent;
+}
+
+.tool-bar .button:hover{
+    -fx-background-color: -fx-shadow-highlight-color, -fx-body-color;
+    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
+    -fx-background-radius: 20px;
+    -fx-padding: 0.333333em 0.666667em 0.333333em 0.666667em; /* 4 8 4 8 */
+    -fx-text-fill: -fx-text-base-color;
+    -fx-alignment: CENTER;
+    -fx-content-display: LEFT;
+}
+
+
+.fbar .button:hover{
+    -fx-background-color: -fx-shadow-highlight-color, -fx-body-color;
+    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
+    -fx-background-radius: 6px;
+    -fx-padding: 0.333333em 0.666667em 0.333333em 0.666667em; /* 4 8 4 8 */
+    -fx-text-fill: -fx-text-base-color;
+    -fx-alignment: CENTER;
+    -fx-content-display: LEFT;
+}
+
+
+.dialog-pane {
+    -fx-font-size: 11;
+    -fx-font-family: "Segoe UI Semilight", "Ubuntu", Tahoma;
+}
+
+.dialog-pane > .button-bar > .container {
+    -fx-font-size: 11;
+    -fx-font-family: "Segoe UI Semilight", "Ubuntu", Tahoma;
+}
+
+.dialog-pane > .content.label {
+    -fx-font-size: 11;
+    -fx-font-family: "Segoe UI Semilight", "Ubuntu", Tahoma;
+}
+
+.dialog-pane:header .header-panel {
+    -fx-font-size: 11;
+    -fx-font-family: "Segoe UI Semilight", "Ubuntu", Tahoma;
+}
+
+.dialog-pane:header .header-panel .label{
+    -fx-font-size: 11;
+    -fx-font-family: "Segoe UI Semilight", "Ubuntu", Tahoma;
+}
+
+.dialog-pane .button{
+    -fx-font-size: 11;
+    -fx-font-family: "Segoe UI Semilight", "Ubuntu", Tahoma;
+}
+
+.dialog-pane .button:hover{
+
+}
+
+
+.main-split-pane {
+    -fx-box-border: transparent;
+}
+
+.main-split-pane .split-pane-divider {
+    -fx-border: none;
+    -fx-padding: 0 2px 0 2px;
+    -fx-background-color: transparent, -fx-control;
+    -fx-background-insets: 0, 1 0 1 0;
+}
+
+.tab-pane {
+    -fx-border-insets: 0 0 0 0;
+    -fx-border-width: 0;
+    -fx-border-color: transparent;
+    -fx-background-color: -fx-control;
+}
+
+*.tab-header-area *.tab-header-background {
+    -fx-background-color: transparent;
+}
+
+*.tab-header-area *.tab-header-background {
+    -fx-padding: 0;
+    -fx-border-width: 0 0 4 0;
+    -fx-border-color: #ccc;
+    -fx-border-insets: 0 0 0 0;
+}
+
+.tab {
+    -fx-font-size: 11;
+    -fx-font-family: "Segoe UI Semilight", "Ubuntu", Tahoma;
+    -fx-background-color: -fx-body-color;
+    -fx-border-color: #ccc;
+    -fx-border-width: 0 0 4 0;
+}
+
+.tab:selected, .tab:focused {
+    -fx-background-color: #ccc;
+    -fx-focus-color: transparent;
+    -fx-border-color: mediumblue;
+    -fx-border-width: 2 0 0 0;
+    -fx-border-insets: 0 0 4 0;
+}

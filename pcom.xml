@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<comment>PCom configuration</comment>
+<entry key="frame.h">1023</entry>
+<entry key="frame.y">47</entry>
+<entry key="frame.x">235</entry>
+<entry key="frame.w">1603</entry>
+</properties>

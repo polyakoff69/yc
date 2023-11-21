@@ -1,0 +1,1 @@
+start java -cp pcom.jar ru.pcom.app.Main
