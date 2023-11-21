@@ -53,7 +53,7 @@ public class Main extends Application {
 
         primaryStage.setTitle(CFG.getTextResource().getString("app"));
         primaryStage.setScene(scene);
-        primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/app.jpg")));
+        primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/app.png")));
 
         EvtHandler h = new EvtHandler(primaryStage, this);
         primaryStage.getScene().getWindow().addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, h::closeWindowEvent);

@@ -137,7 +137,7 @@ public class DlgAbout extends Stage {
 
     private Node buildHeader() {
         GridPane gridPane = new GridPane();
-        Image image = new Image(getClass().getResourceAsStream("/app.jpg"));
+        Image image = new Image(getClass().getResourceAsStream("/app.png"));
         ImageView imageView = new ImageView(image);
         gridPane.add(imageView,0,0,1,2);
         gridPane.setHgap(20);
