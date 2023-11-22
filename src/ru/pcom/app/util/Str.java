@@ -43,4 +43,11 @@ public class Str {
         return "..." + s.substring(pos);
     }
 
+    public static String Capit(String s){
+        if(isEmpty(s)){
+            return s;
+        }
+        return s.substring(0,1).toUpperCase()+s.substring(1);
+    }
+
 }

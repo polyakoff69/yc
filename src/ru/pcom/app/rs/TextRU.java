@@ -119,6 +119,9 @@ public class TextRU extends ListResourceBundle {
             { "err_invalid_path", "Указана некорректная папка" },
             { "Question", "Подтверждение" },
             { "Cancel_oper", "Вы хотите прервать выполнение операции?" },
+            { "Retry", "Повторить" },
+            { "Skip", "Пропустить" },
+            { "Skip all", "Пропустить все" },
 
             { "file_replace_confirm", "Подтверждение замены файла" },
             { "replace_file_1", "Заменить файл" },

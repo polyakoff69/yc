@@ -117,6 +117,9 @@ public class Text extends ListResourceBundle {
             { "err_invalid_path", "Invalid path specified" },
             { "Question", "Question" },
             { "Cancel_oper", "Do you want to cancel this operation?" },
+            { "Retry", "Retry" },
+            { "Skip", "Skip" },
+            { "Skip all", "Skip all" },
 
             { "file_replace_confirm", "Confirm File Overwrite" },
             { "replace_file_1", "Overwrite file" },

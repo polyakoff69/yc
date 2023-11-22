@@ -3,6 +3,7 @@ package ru.pcom.app.file;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import ru.pcom.app.Config;
+import ru.pcom.app.dlgerror.DlgOpError;
 import ru.pcom.app.dlgoper.DlgOperation;
 import ru.pcom.app.gui.MsgBox;
 import ru.pcom.app.mainwnd.Controller;
@@ -19,6 +20,7 @@ import java.util.List;
 
 public class SysFileOperation implements IFileOperation {
     private boolean bCopy = false, bDelete = false, bDeletePost = false;
+    private boolean bSkipAllMkDirErr = false;
     private String trgFolder, trgNameExt, trgName, trgExt, srcFolder;
     private Path srcPath, trgPath;
     private Config CFG;
@@ -252,46 +254,51 @@ public class SysFileOperation implements IFileOperation {
             return;
         }
 
-        for(Object o : vfiles) {
-            if(o instanceof Path){
-                if(bCopy) {
-                    copy((Path) o);
+        try {
+            for (Object o : vfiles) {
+                if (o instanceof Path) {
+                    if (bCopy) {
+                        copy((Path) o);
+                    }
+                    if (bDelete && bDeletePost == false) {
+                        delete((Path) o);
+                    }
                 }
-                if(bDelete && bDeletePost==false) {
-                    delete((Path) o);
+                if (o instanceof File) {
+                    if (bCopy) {
+                        copy((File) o);
+                    }
+                    if (bDelete && bDeletePost == false) {
+                        delete((File) o);
+                    }
                 }
-            }
-            if(o instanceof File){
-                if(bCopy) {
-                    copy((File) o);
-                }
-                if(bDelete && bDeletePost==false) {
-                    delete((File) o);
-                }
-            }
-            cnt++;
+                cnt++;
 
-            if(dlgOp.isCancelled()){
-                Platform.runLater(() -> ctr.onCmd("endoper", "", null));
-                return;
-            }
-        }
-
-        if(bDelete && bDeletePost){
-            for(Object o : vfiles) {
-                if(dlgOp.isCancelled()){
+                if (dlgOp.isCancelled()) {
                     Platform.runLater(() -> ctr.onCmd("endoper", "", null));
                     return;
                 }
-
-                if(o instanceof Path){
-                    delete((Path) o);
-                }
-                if(o instanceof File){
-                    delete((File) o);
-                }
-                cnt++;
             }
+
+            if (bDelete && bDeletePost) {
+                for (Object o : vfiles) {
+                    if (dlgOp.isCancelled()) {
+                        Platform.runLater(() -> ctr.onCmd("endoper", "", null));
+                        return;
+                    }
+
+                    if (o instanceof Path) {
+                        delete((Path) o);
+                    }
+                    if (o instanceof File) {
+                        delete((File) o);
+                    }
+                    cnt++;
+                }
+            }
+        }catch (AbortOpException abox){
+            Platform.runLater(() -> ctr.onCmd("endoper", "", null));
+            return;
         }
 
         // TODO: on finish
@@ -327,11 +334,7 @@ public class SysFileOperation implements IFileOperation {
 
     private void copy(Path file) throws Exception{
         if(Files.isDirectory(file)){
-            try {
-                Files.createDirectories(getTargetPath(file));
-            }catch (Exception e){
-                throw new Exception(CFG.getTextResource().getString("err_mk_dir")+": "+e.getMessage()+getExceptionDescr(e));
-            }
+            mkdir(getTargetPath(file));
             return;
         }
         Path tp = getTargetPath(file);
@@ -339,13 +342,36 @@ public class SysFileOperation implements IFileOperation {
         updateDlgOp(file.toFile(), tp.toFile());
         Path par = tp.getParent();
         if(par!=null && !Files.exists(par)){
-            try{
-                Files.createDirectories(par);
-            }catch (Exception e){
-                throw new Exception(CFG.getTextResource().getString("err_mk_dir")+": "+e.getMessage()+getExceptionDescr(e));
-            }
+            mkdir(par);
         }
         Files.copy(file, tp);
+    }
+
+    private void mkdir(Path dir){
+        do {
+            try {
+                Files.createDirectories(getTargetPath(dir));
+                break;
+            } catch (Exception e) {
+                if(bSkipAllMkDirErr){
+                    return;
+                }
+                DlgOpError dlg = new DlgOpError(dlgOp, CFG.getTextResource().getString("err_mk_dir"));
+                dlg.setFile(dir.toFile(), e.getMessage() + getExceptionDescr(e));
+                dlg.showAndWait();
+                int r = dlg.getResult();
+                if(r<=0){
+                    throw new AbortOpException();
+                }
+                if(r==2){
+                    break;
+                }
+                if(r==3) {
+                    bSkipAllMkDirErr = true;
+                    break;
+                }
+            }
+        }while (true);
     }
 
     private void delete(File f) throws Exception{
@@ -384,6 +410,9 @@ public class SysFileOperation implements IFileOperation {
     private String applyMask(String fname, String mask){
         if(mask.contains(".")){
             int pos = fname.lastIndexOf(".");
+            if(pos<0){
+                return applyMask(fname, trgName);
+            }
             String fname1 = fname.substring(0,pos);
             String ext = fname.substring(pos+1);
             return applyMask(fname1, trgName)+"."+applyMask(ext, trgExt);
@@ -463,4 +492,10 @@ public class SysFileOperation implements IFileOperation {
         });
     }
 
+}
+
+class AbortOpException extends RuntimeException {
+    public AbortOpException(){
+        super();
+    }
 }
