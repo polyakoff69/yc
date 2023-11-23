@@ -20,18 +20,18 @@ import ru.pcom.app.gui.MsgBox;
 import ru.pcom.app.util.*;
 
 import java.io.File;
-import java.nio.file.attribute.FileTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 public class DlgOpError extends Stage {
   ResourceBundle rs = null;
   Label labFile = new Label(""), labFileName = new Label(""), labErrMsg = new Label(""), labErr = new Label("");
+  private String item;
   private int result = -1;
 
-  public DlgOpError(Stage owner, String title) {
+  public DlgOpError(Stage owner, String title, String item) {
     super();
     rs = Config.get().getTextResource();
+    this.item = item;
 
     initOwner(owner);
     setTitle(title);
@@ -58,20 +58,24 @@ public class DlgOpError extends Stage {
 
     setScene(scene);
 
-    Button btnY = new Button(rs.getString("Retry"));
-    btnY.setOnAction(evt-> onSave());
-    btnY.setMinWidth(UiUtil.getWidgetWidth(75));
-    btnY.setDefaultButton(true);
+    Button btnR = new Button(rs.getString("Retry"));
+    btnR.setOnAction(evt-> onButton(1));
+    btnR.setMinWidth(UiUtil.getWidgetWidth(75));
+    btnR.setDefaultButton(true);
 
     Button btnX = new Button(rs.getString("cancel"));
     btnX.setOnAction(evt-> close());
     btnX.setMinWidth(UiUtil.getWidgetWidth(75));
 
-    Button btnN = new Button(rs.getString("no"));
-    btnN.setOnAction(evt-> onNo());
-    btnN.setMinWidth(UiUtil.getWidgetWidth(75));
+    Button btnS = new Button(rs.getString("Skip"));
+    btnS.setOnAction(evt-> onButton(2));
+    btnS.setMinWidth(UiUtil.getWidgetWidth(75));
 
-    HBox paneButtons = new HBox(10, btnY, btnN, btnX);
+    Button btnSA = new Button(rs.getString("Skip all"));
+    btnSA.setOnAction(evt-> onButton(3));
+    btnSA.setMinWidth(UiUtil.getWidgetWidth(75));
+
+    HBox paneButtons = new HBox(10, btnR, btnS, btnSA, btnX);
     paneButtons.setPadding(new Insets(10, 0, 0, 0));
     paneButtons.setAlignment(Pos.BASELINE_CENTER);
     // gridpaneButtons.setHgap(5);
@@ -84,7 +88,7 @@ public class DlgOpError extends Stage {
     gridpane1.setVgap(4);
     // gridpane1.getColumnConstraints().add(new ColumnConstraints(250));
 
-    labFile.setText(Str.Capit(rs.getString("file")+":  "));
+    labFile.setText(Str.Capit(rs.getString(item)+":  ").replace("_",""));
     // prompt.setPrefWidth(400.0);
     labErr.setText(rs.getString("error")+":  ");
 
@@ -93,12 +97,14 @@ public class DlgOpError extends Stage {
     gridpane1.add(paneButtons, 0, 2, 2, 1);
 
     labFileName.setMinWidth(300.0);
-    GridPane.setMargin(labErr, new Insets(10, 0, 0, 0));
-    GridPane.setMargin(labErrMsg, new Insets(10, 0, 0, 0));
+    // GridPane.setMargin(labErr, new Insets(10, 0, 0, 0));
+    // GridPane.setMargin(labErrMsg, new Insets(10, 0, 0, 0));
 
-    GridPane.setHalignment(btnY, HPos.CENTER.RIGHT);
+    GridPane.setHalignment(btnR, HPos.CENTER.RIGHT);
     GridPane.setHalignment(btnX, HPos.CENTER.RIGHT);
-    GridPane.setHalignment(labErr, HPos.CENTER.RIGHT);
+    GridPane.setHalignment(btnS, HPos.CENTER.RIGHT);
+    GridPane.setHalignment(btnSA, HPos.CENTER.RIGHT);
+    GridPane.setHalignment(labFile, HPos.CENTER.RIGHT);
 
     root.getChildren().add(gridpane1);
 
@@ -114,13 +120,8 @@ public class DlgOpError extends Stage {
     root.setStyle("-fx-background-color: -fx-base;");
   }
 
-  private void onSave(){
-    result = 1;
-    close();
-  }
-
-  private void onNo(){
-    result = 0;
+  private void onButton(int r){
+    result = r;
     close();
   }
 

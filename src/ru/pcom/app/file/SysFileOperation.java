@@ -17,6 +17,8 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class SysFileOperation implements IFileOperation {
     private boolean bCopy = false, bDelete = false, bDeletePost = false;
@@ -350,16 +352,24 @@ public class SysFileOperation implements IFileOperation {
     private void mkdir(Path dir){
         do {
             try {
-                Files.createDirectories(getTargetPath(dir));
+                Path p = getTargetPath(dir);
+                File f = p.toFile();
+                Files.createDirectories(f.getCanonicalFile().toPath());
                 break;
             } catch (Exception e) {
                 if(bSkipAllMkDirErr){
                     return;
                 }
-                DlgOpError dlg = new DlgOpError(dlgOp, CFG.getTextResource().getString("err_mk_dir"));
-                dlg.setFile(dir.toFile(), e.getMessage() + getExceptionDescr(e));
-                dlg.showAndWait();
-                int r = dlg.getResult();
+                try {
+                    Semaphore sem = new Semaphore(1);
+                    sem.acquire();
+                    Platform.runLater(() -> dlgOp.showError(CFG.getTextResource().getString("err_mk_dir"), dir.toFile(), "folder", e.getMessage() + getExceptionDescr(e), sem));
+                    sem.acquire();
+                    sem.release();
+                }catch (InterruptedException iex){
+                    throw new RuntimeException(iex.getMessage());
+                }
+                int r = dlgOp.getErrResult();
                 if(r<=0){
                     throw new AbortOpException();
                 }

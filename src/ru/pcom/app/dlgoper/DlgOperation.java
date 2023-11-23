@@ -17,6 +17,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import ru.pcom.app.Config;
 import ru.pcom.app.Main;
+import ru.pcom.app.dlgerror.DlgOpError;
 import ru.pcom.app.gui.MsgBox;
 import ru.pcom.app.util.CfgUtil;
 import ru.pcom.app.util.UiUtil;
@@ -26,6 +27,8 @@ import java.io.File;
 import java.text.NumberFormat;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.locks.Lock;
 
 public class DlgOperation extends Stage {
     ResourceBundle rs = null;
@@ -35,6 +38,7 @@ public class DlgOperation extends Stage {
     Label procent = new Label("0%");
     private String promptId;
     protected boolean cancelled = false, file2 = true;
+    private int errResult = -1;
 
     public DlgOperation(Stage owner, String title, String promptId) {
         super();
@@ -191,6 +195,22 @@ public class DlgOperation extends Stage {
         progress.setProgress((double) prc / 100.0);
         NumberFormat nf = NumberFormat.getNumberInstance();
         opinfo.setText(""+prc+"%, "+nf.format(cnt)+"/"+nf.format(total));
+    }
+
+    public void showError(String title, File file, String item, String err, Semaphore sem){
+        DlgOpError dlg = new DlgOpError(this, title, item);
+        dlg.setFile(file, err);
+        dlg.showAndWait();
+        errResult = dlg.getResult();
+        sem.release();
+    }
+
+    public int getErrResult() {
+        return errResult;
+    }
+
+    public void setErrResult(int errResult) {
+        this.errResult = errResult;
     }
 
 }
