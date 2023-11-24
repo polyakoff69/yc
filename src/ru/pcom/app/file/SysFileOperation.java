@@ -396,8 +396,13 @@ public class SysFileOperation implements IFileOperation {
         Files.delete(file);
     }
     private Path getTargetPath(Path src){
-        Path p1 = srcPath.relativize(src);
-        Path p2 = trgPath.resolve(p1);
+        Path p2 = src;
+        try {
+            Path p1 = srcPath.relativize(src);
+            p2 = trgPath.resolve(p1);
+        }catch (IllegalArgumentException ix){
+            p2 = src;
+        }
         return applyMask(p2);
     }
 
@@ -482,6 +487,9 @@ public class SysFileOperation implements IFileOperation {
     private String getExceptionDescr(Exception e){
         if(e instanceof AccessDeniedException){
             return ". "+CFG.getTextResource().getString("Access denied");
+        }
+        if(e instanceof FileAlreadyExistsException){
+            return ". "+CFG.getTextResource().getString("folder_exists");
         }
         return "";
     }
