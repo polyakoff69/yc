@@ -2,6 +2,7 @@ package ru.pcom.app.mainwnd;
 
 import javafx.application.Platform;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
@@ -440,6 +441,10 @@ public abstract class MainFrmCtrl extends MainFrmMenuToolBars {
         if(css!=null)
             dialogPane.getStylesheets().add(css);
         // dialogPane.getStyleClass().add("myDialog");
+        Stage stage = (Stage) dialogPane.getScene().getWindow();
+        stage.getIcons().clear();
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("/app.png")));
+
         dialogPane.requestFocus();
         Optional<ButtonType> res = alert.showAndWait();
 

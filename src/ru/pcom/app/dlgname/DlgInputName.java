@@ -7,6 +7,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
@@ -52,7 +53,6 @@ public class DlgInputName extends Stage {
     protected void initControls(){
         Group root = new Group();
         Scene scene = new Scene(root /*, 250, 150 */ /*, Color.WHITE */);
-
         scene.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
             final KeyCombination keyComb = new KeyCodeCombination(KeyCode.ESCAPE, KeyCombination.SHIFT_ANY);
             public void handle(KeyEvent ke) {
@@ -108,6 +108,9 @@ public class DlgInputName extends Stage {
         css = CfgUtil.loadCSS(this.getClass(),"/dlg.css");
         if(css!=null)
             getScene().getStylesheets().add(css);
+
+        Stage stage = (Stage) getScene().getWindow();
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("/app.png")));
 
         paneButtons.getStyleClass().add("dlg-wnd");
         gridpane1.getStyleClass().add("dlg-wnd");

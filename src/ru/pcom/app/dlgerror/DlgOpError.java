@@ -7,6 +7,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
@@ -114,6 +115,9 @@ public class DlgOpError extends Stage {
     css = CfgUtil.loadCSS(this.getClass(),"/dlg.css");
     if(css!=null)
       getScene().getStylesheets().add(css);
+
+    Stage stage = (Stage) getScene().getWindow();
+    stage.getIcons().add(new Image(getClass().getResourceAsStream("/app.png")));
 
     paneButtons.getStyleClass().add("dlg-wnd");
     gridpane1.getStyleClass().add("dlg-wnd");

@@ -126,6 +126,9 @@ public class Main extends Application {
                 if(css!=null)
                     dialogPane.getStylesheets().add(css);
                 // dialogPane.getStyleClass().add("myDialog");
+                Stage stage = (Stage) dialogPane.getScene().getWindow();
+                stage.getIcons().clear();
+                stage.getIcons().add(new Image(getClass().getResourceAsStream("/app.png")));
 
                 Optional<ButtonType> res = alert.showAndWait();
 

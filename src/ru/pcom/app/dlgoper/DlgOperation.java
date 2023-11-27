@@ -7,6 +7,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
@@ -139,6 +140,9 @@ public class DlgOperation extends Stage {
         if(css!=null)
             getScene().getStylesheets().add(css);
 
+        Stage stage = (Stage) getScene().getWindow();
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("/app.png")));
+
         paneButtons.getStyleClass().add("dlg-wnd");
         gridpane1.getStyleClass().add("dlg-wnd");
         root.setStyle("-fx-background-color: -fx-base;");
@@ -172,6 +176,9 @@ public class DlgOperation extends Stage {
         if(css!=null)
             dialogPane.getStylesheets().add(css);
         // dialogPane.getStyleClass().add("myDialog");
+        Stage stage = (Stage) dialogPane.getScene().getWindow();
+        stage.getIcons().clear();
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("/app.png")));
 
         Optional<ButtonType> res = alert.showAndWait();
         if(res.isPresent()){

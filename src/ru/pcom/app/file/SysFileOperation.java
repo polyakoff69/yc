@@ -22,7 +22,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class SysFileOperation implements IFileOperation {
     private boolean bCopy = false, bDelete = false, bDeletePost = false;
-    private boolean bSkipAllMkDirErr = false;
+    private boolean bSkipAllMkDirErr = false, bSkipAllCopyErr = false;
     private String trgFolder, trgNameExt, trgName, trgExt, srcFolder;
     private Path srcPath, trgPath;
     private Config CFG;
@@ -346,7 +346,40 @@ public class SysFileOperation implements IFileOperation {
         if(par!=null && !Files.exists(par)){
             mkdir(par);
         }
-        Files.copy(file, tp);
+        copy(file, tp);
+    }
+
+    private void copy(Path src, Path trg) throws Exception{
+        do {
+            try {
+                Files.copy(src, trg);
+                break;
+            } catch (Exception e) {
+                if(bSkipAllCopyErr){
+                    return;
+                }
+                try {
+                    Semaphore sem = new Semaphore(1);
+                    sem.acquire();
+                    Platform.runLater(() -> dlgOp.showError(CFG.getTextResource().getString("err_copy_file"), src.toFile(), "file1", e.getMessage() + getExceptionDescr(e)+".", sem));
+                    sem.acquire();
+                    sem.release();
+                }catch (InterruptedException iex){
+                    throw new RuntimeException(iex.getMessage());
+                }
+                int r = dlgOp.getErrResult();
+                if(r<=0){
+                    throw new AbortOpException();
+                }
+                if(r==2){
+                    break;
+                }
+                if(r==3) {
+                    bSkipAllCopyErr = true;
+                    break;
+                }
+            }
+        }while (true);
     }
 
     private void mkdir(Path dir){

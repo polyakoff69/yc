@@ -58,6 +58,9 @@ public class DlgAbout extends Stage {
 
         setScene(scene);
 
+        Stage stage = (Stage) getScene().getWindow();
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("/app.png")));
+
         BorderPane borderPane = new BorderPane();
         borderPane.setTop(buildHeader());
 
