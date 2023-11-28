@@ -140,7 +140,7 @@ public class Main extends Application {
                     } else {
 
                         try { // save window pos
-                            Stage s= stage;
+                            Stage s= this.stage;
                             CFG.setFrmW((int)s.getScene().getWidth());
                             CFG.setFrmH((int)s.getScene().getHeight());
                             CFG.setFrmX((int)s.getX());
