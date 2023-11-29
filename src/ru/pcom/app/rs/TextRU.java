@@ -122,6 +122,7 @@ public class TextRU extends ListResourceBundle {
             { "Retry", "Повторить" },
             { "Skip", "Пропустить" },
             { "Skip all", "Пропустить все" },
+            { "All", "Все" },
 
             { "file_replace_confirm", "Подтверждение замены файла" },
             { "replace_file_1", "Заменить файл" },

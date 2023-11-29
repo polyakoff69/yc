@@ -3,7 +3,6 @@ package ru.pcom.app.file;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import ru.pcom.app.Config;
-import ru.pcom.app.dlgerror.DlgOpError;
 import ru.pcom.app.dlgoper.DlgOperation;
 import ru.pcom.app.gui.MsgBox;
 import ru.pcom.app.mainwnd.Controller;
@@ -18,11 +17,11 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.concurrent.Semaphore;
-import java.util.concurrent.locks.ReentrantLock;
 
 public class SysFileOperation implements IFileOperation {
     private boolean bCopy = false, bDelete = false, bDeletePost = false;
-    private boolean bSkipAllMkDirErr = false, bSkipAllCopyErr = false, bSkipAllDelErr = false;
+    private boolean bSkipAllMkDirErr = false, bSkipAllCopyErr = false, bSkipAllDelErr = false, bSkipCopyExists = false,
+                    bRewriteAll = false;
     private String trgFolder, trgNameExt, trgName, trgExt, srcFolder;
     private Path srcPath, trgPath;
     private Config CFG;
@@ -350,10 +349,49 @@ public class SysFileOperation implements IFileOperation {
     }
 
     private void copy(Path src, Path trg) throws Exception{
+        boolean bRewrite = false;
+        if(bRewriteAll){
+            bRewrite = true;
+        }
+
         do {
             try {
-                Files.copy(src, trg);
+                if(bRewrite){
+                    Files.copy(src, trg, StandardCopyOption.REPLACE_EXISTING);
+                }else {
+                    Files.copy(src, trg);
+                }
                 break;
+            } catch (FileAlreadyExistsException fex){
+                if(bSkipCopyExists){
+                    return;
+                }
+                try {
+                    Semaphore sem = new Semaphore(1);
+                    sem.acquire();
+                    Platform.runLater(() -> dlgOp.showRewrite(CFG.getTextResource().getString("file_replace_confirm"), trg.toFile(), src.toFile(), sem));
+                    sem.acquire();
+                    sem.release();
+                }catch (InterruptedException iex){
+                    throw new RuntimeException(iex.getMessage());
+                }
+                int r = dlgOp.getRewriteResult();
+                if(r<=0){
+                    throw new AbortOpException();
+                }
+                if(r==2){
+                    break;
+                }
+                if(r==3) {
+                    bSkipCopyExists = true;
+                    break;
+                }
+                if(r==4){
+                    bRewriteAll = true;
+                }
+                if(r==1){
+                    bRewrite = true;
+                }
             } catch (Exception e) {
                 if(bSkipAllCopyErr){
                     return;

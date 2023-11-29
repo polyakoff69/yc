@@ -120,6 +120,7 @@ public class Text extends ListResourceBundle {
             { "Retry", "Retry" },
             { "Skip", "Skip" },
             { "Skip all", "Skip all" },
+            { "All", "All" },
 
             { "file_replace_confirm", "Confirm File Overwrite" },
             { "replace_file_1", "Overwrite file" },

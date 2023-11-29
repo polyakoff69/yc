@@ -63,20 +63,8 @@ public class DlgFileReplace extends Stage {
 
         setScene(scene);
 
-        Button btnY = new Button(rs.getString("yes"));
-        btnY.setOnAction(evt-> onSave());
-        btnY.setMinWidth(UiUtil.getWidgetWidth(75));
-        btnY.setDefaultButton(true);
-
-        Button btnX = new Button(rs.getString("cancel"));
-        btnX.setOnAction(evt-> close());
-        btnX.setMinWidth(UiUtil.getWidgetWidth(75));
-
-        Button btnN = new Button(rs.getString("no"));
-        btnN.setOnAction(evt-> onNo());
-        btnN.setMinWidth(UiUtil.getWidgetWidth(75));
-
-        HBox paneButtons = new HBox(10, btnY, btnN, btnX);
+        Button[] bb = initButtons();
+        HBox paneButtons = new HBox(10, bb);
         paneButtons.setPadding(new Insets(10, 0, 0, 0));
         paneButtons.setAlignment(Pos.BASELINE_CENTER);
         // gridpaneButtons.setHgap(5);
@@ -104,8 +92,9 @@ public class DlgFileReplace extends Stage {
         GridPane.setMargin(prompt2, new Insets(10, 0, 0, 0));
         GridPane.setMargin(f2, new Insets(10, 0, 0, 0));
 
-        GridPane.setHalignment(btnY, HPos.CENTER.RIGHT);
-        GridPane.setHalignment(btnX, HPos.CENTER.RIGHT);
+        for(Button b : bb) {
+            GridPane.setHalignment(b, HPos.CENTER.RIGHT);
+        }
         GridPane.setHalignment(prompt2, HPos.CENTER.RIGHT);
 
         root.getChildren().add(gridpane1);
@@ -125,13 +114,35 @@ public class DlgFileReplace extends Stage {
         root.setStyle("-fx-background-color: -fx-base;");
     }
 
-    private void onSave(){
+    protected Button[] initButtons(){
+        Button btnY = new Button(rs.getString("yes"));
+        btnY.setOnAction(evt-> onSave());
+        btnY.setMinWidth(UiUtil.getWidgetWidth(75));
+        btnY.setDefaultButton(true);
+
+        Button btnX = new Button(rs.getString("cancel"));
+        btnX.setOnAction(evt-> close());
+        btnX.setMinWidth(UiUtil.getWidgetWidth(75));
+
+        Button btnN = new Button(rs.getString("no"));
+        btnN.setOnAction(evt-> onNo());
+        btnN.setMinWidth(UiUtil.getWidgetWidth(75));
+
+        return new Button[] {btnY, btnN, btnX};
+    }
+
+    protected void onSave(){
         result = 1;
         close();
     }
 
-    private void onNo(){
+    protected void onNo(){
         result = 0;
+        close();
+    }
+
+    protected void onButton(int r){
+        result = r;
         close();
     }
 

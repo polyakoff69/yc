@@ -19,6 +19,7 @@ import javafx.stage.WindowEvent;
 import ru.pcom.app.Config;
 import ru.pcom.app.Main;
 import ru.pcom.app.dlgerror.DlgOpError;
+import ru.pcom.app.dlgfreplace.DlgFileReplace2;
 import ru.pcom.app.gui.MsgBox;
 import ru.pcom.app.util.CfgUtil;
 import ru.pcom.app.util.UiUtil;
@@ -40,6 +41,7 @@ public class DlgOperation extends Stage {
     private String promptId;
     protected boolean cancelled = false, file2 = true;
     private int errResult = -1;
+    private int rewriteResult = -1;
 
     public DlgOperation(Stage owner, String title, String promptId) {
         super();
@@ -218,6 +220,22 @@ public class DlgOperation extends Stage {
 
     public void setErrResult(int errResult) {
         this.errResult = errResult;
+    }
+
+    public void showRewrite(String title, File file, File file2, Semaphore sem){
+        DlgFileReplace2 dlg = new DlgFileReplace2(this, title);
+        dlg.setFiles(file, file2);
+        dlg.showAndWait();
+        rewriteResult = dlg.getResult();
+        sem.release();
+    }
+
+    public int getRewriteResult() {
+        return rewriteResult;
+    }
+
+    public void setRewriteResult(int rewriteResult) {
+        this.rewriteResult = rewriteResult;
     }
 
 }
