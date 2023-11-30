@@ -50,7 +50,7 @@ public class FileUtil {
         }
         if(Os.isWindows()){
             try {
-                String a = getFilePxAttr(f);
+                String a = getFileAttr(f);
                 if(a.contains("R") || a.contains("S") || a.contains("H")){
                     return true;
                 }
