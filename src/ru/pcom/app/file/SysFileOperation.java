@@ -22,7 +22,7 @@ import java.util.concurrent.Semaphore;
 public class SysFileOperation implements IFileOperation {
     private boolean bCopy = false, bDelete = false, bDeletePost = false;
     private boolean bSkipAllMkDirErr = false, bSkipAllCopyErr = false, bSkipAllDelErr = false, bSkipCopyExists = false,
-                    bRewriteAll = false, bSkipRO = false, bForceRO = false;
+                    bRewriteAll = false, bSkipRO = false, bForceRO = false, bDelROAll = false, bSkipDelRO = false;
     private String trgFolder, trgNameExt, trgName, trgExt, srcFolder;
     private Path srcPath, trgPath;
     private Config CFG;
@@ -515,10 +515,61 @@ public class SysFileOperation implements IFileOperation {
     }
 
     private void delete2(Path file) throws Exception{
+        String elem2 = "file1", msg01 = "file_delete_ro_confirm";
+        if(Files.isDirectory(file)){
+            elem2 = "folder";
+            msg01 = "folder_delete_ro_confirm";
+        }
+        final String elem = elem2, msg1 = msg01;
+
+        boolean bDelRO = false;
         do {
+            if(bDelROAll){
+                bDelRO = true;
+            }
+
             try {
+                if(FileUtil.isRO(file)) {
+                    if (bDelRO) {
+                        FileUtil.cleanRO(file);
+                    } else {
+                        throw new ROException(file.toString());
+                    }
+                }
                 Files.delete(file);
                 break;
+            } catch (ROException rox){
+                if(bSkipDelRO){
+                    return;
+                }
+                try {
+                    Semaphore sem = new Semaphore(1);
+                    sem.acquire();
+                    Platform.runLater(() -> dlgOp.showWarn(CFG.getTextResource().getString("Confirm Delete"),
+                            file.toFile(), elem, CFG.getTextResource().getString(msg1),
+                            sem));
+                    sem.acquire();
+                    sem.release();
+                }catch (InterruptedException iex){
+                    throw new RuntimeException(iex.getMessage());
+                }
+                int r = dlgOp.getWarnResult();
+                if(r<=0){
+                    throw new AbortOpException();
+                }
+                if(r==2){
+                    break;
+                }
+                if(r==3) {
+                    bSkipDelRO = true;
+                    break;
+                }
+                if(r==4){
+                    bDelROAll = true;
+                }
+                if(r==1){
+                    bDelRO = true;
+                }
             } catch (Exception e) {
                 if(bSkipAllDelErr){
                     return;
@@ -526,7 +577,7 @@ public class SysFileOperation implements IFileOperation {
                 try {
                     Semaphore sem = new Semaphore(1);
                     sem.acquire();
-                    Platform.runLater(() -> dlgOp.showError(CFG.getTextResource().getString("err_del"), file.toFile(), "file1", e.getMessage() + getExceptionDescr(e), sem));
+                    Platform.runLater(() -> dlgOp.showError(CFG.getTextResource().getString("err_del"), file.toFile(), elem, e.getMessage() + getExceptionDescr(e), sem));
                     sem.acquire();
                     sem.release();
                 }catch (InterruptedException iex){

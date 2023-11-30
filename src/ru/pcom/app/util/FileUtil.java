@@ -51,7 +51,7 @@ public class FileUtil {
         if(Os.isWindows()){
             try {
                 String a = getFileAttr(f);
-                if(a.contains("R") || a.contains("S") || a.contains("H")){
+                if(a.contains("R") || a.contains("S") || a.contains("H")){ // TODO: unix
                     return true;
                 }
             }catch (Exception e){}
@@ -61,5 +61,10 @@ public class FileUtil {
 
     public static void cleanRO(Path p){
         p.toFile().setWritable(true);
+        if(Os.isWindows()){
+            try {
+                Files.setAttribute(p, "dos:readonly", false); // TODO: unix?
+            }catch (Exception e){}
+        }
     }
 }

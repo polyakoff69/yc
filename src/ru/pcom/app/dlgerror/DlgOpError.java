@@ -89,6 +89,7 @@ public class DlgOpError extends Stage {
       GridPane.setHalignment(b, HPos.CENTER.RIGHT);
     }
     GridPane.setHalignment(labFile, HPos.CENTER.RIGHT);
+    GridPane.setHalignment(labErr, HPos.CENTER.RIGHT);
 
     root.getChildren().add(gridpane1);
 

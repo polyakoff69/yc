@@ -129,6 +129,7 @@ public class Text extends ListResourceBundle {
             { "Done", "Done" },
             { "file_replace_ro_confirm", "Do you want to overwrite the file with READ-ONLY or SYSTEM or HIDDEN attribute?" },
             { "file_delete_ro_confirm", "Do you want to delete the file with READ-ONLY or SYSTEM or HIDDEN attribute?" },
+            { "folder_delete_ro_confirm", "Do you want to delete the folder with READ-ONLY or SYSTEM or HIDDEN attribute?" },
 
             { "folder", "Folder" },
             { "val_byte", "b" },
