@@ -127,6 +127,7 @@ public class Text extends ListResourceBundle {
             { "replace_file_2", "With file" },
             { "to", "to" },
             { "Done", "Done" },
+            { "file_replace_ro_confirm", "Do you want to delete the file with READ-ONLY or SYSTEM or HIDDEN attribute?" },
 
             { "folder", "Folder" },
             { "val_byte", "b" },

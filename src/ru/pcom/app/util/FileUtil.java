@@ -1,8 +1,11 @@
 package ru.pcom.app.util;
 
+import ru.pcom.app.sys.Os;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.attribute.*;
 
 public class FileUtil {
@@ -35,5 +38,25 @@ public class FileUtil {
     public static String getFilePxAttr(File f) throws IOException {
         PosixFileAttributes attr2 = Files.readAttributes(f.toPath(), PosixFileAttributes.class);
         return PosixFilePermissions.toString(attr2.permissions());
+    }
+
+    public static boolean isRO(Path file){
+        File f = file.toFile();
+        if(f.isHidden() || f.canWrite()==false){
+            return true;
+        }
+        if(Os.isWindows()){
+            try {
+                String a = getFilePxAttr(f);
+                if(a.contains("R") || a.contains("S") || a.contains("H")){
+                    return true;
+                }
+            }catch (Exception e){}
+        }
+        return false;
+    }
+
+    public static void cleanRO(Path p){
+        p.toFile().setWritable(true);
     }
 }

@@ -7,6 +7,7 @@ import ru.pcom.app.dlgoper.DlgOperation;
 import ru.pcom.app.gui.MsgBox;
 import ru.pcom.app.mainwnd.Controller;
 import ru.pcom.app.sys.Os;
+import ru.pcom.app.util.FileUtil;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -21,7 +22,7 @@ import java.util.concurrent.Semaphore;
 public class SysFileOperation implements IFileOperation {
     private boolean bCopy = false, bDelete = false, bDeletePost = false;
     private boolean bSkipAllMkDirErr = false, bSkipAllCopyErr = false, bSkipAllDelErr = false, bSkipCopyExists = false,
-                    bRewriteAll = false;
+                    bRewriteAll = false, bSkipRO = false, bForceRO = false;
     private String trgFolder, trgNameExt, trgName, trgExt, srcFolder;
     private Path srcPath, trgPath;
     private Config CFG;
@@ -349,13 +350,23 @@ public class SysFileOperation implements IFileOperation {
     }
 
     private void copy(Path src, Path trg) throws Exception{
-        boolean bRewrite = false;
+        boolean bRewrite = false, bRewriteRO = false;
         if(bRewriteAll){
             bRewrite = true;
+        }
+        if(bForceRO){
+            bRewriteRO = true;
         }
 
         do {
             try {
+                if(FileUtil.isRO(trg)){
+                    if(bRewriteRO){
+                        FileUtil.cleanRO(trg);
+                    }else {
+                        throw new ROException(trg.toString());
+                    }
+                }
                 if(bRewrite){
                     Files.copy(src, trg, StandardCopyOption.REPLACE_EXISTING);
                 }else {
@@ -391,6 +402,38 @@ public class SysFileOperation implements IFileOperation {
                 }
                 if(r==1){
                     bRewrite = true;
+                }
+            } catch (ROException rox){
+                if(bSkipRO){
+                    return;
+                }
+                try {
+                    Semaphore sem = new Semaphore(1);
+                    sem.acquire();
+                    Platform.runLater(() -> dlgOp.showWarn(CFG.getTextResource().getString("file_replace_confirm"),
+                           trg.toFile(), "file1", CFG.getTextResource().getString("file_replace_ro_confirm"),
+                           sem));
+                    sem.acquire();
+                    sem.release();
+                }catch (InterruptedException iex){
+                    throw new RuntimeException(iex.getMessage());
+                }
+                int r = dlgOp.getWarnResult();
+                if(r<=0){
+                    throw new AbortOpException();
+                }
+                if(r==2){
+                    break;
+                }
+                if(r==3) {
+                    bSkipRO = true;
+                    break;
+                }
+                if(r==4){
+                    bForceRO = true;
+                }
+                if(r==1){
+                    bRewriteRO = true;
                 }
             } catch (Exception e) {
                 if(bSkipAllCopyErr){
@@ -620,5 +663,11 @@ public class SysFileOperation implements IFileOperation {
 class AbortOpException extends RuntimeException {
     public AbortOpException(){
         super();
+    }
+}
+
+class ROException extends AccessDeniedException {
+    public ROException(String file){
+        super(file);
     }
 }

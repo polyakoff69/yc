@@ -129,6 +129,7 @@ public class TextRU extends ListResourceBundle {
             { "replace_file_2", "Файлом" },
             { "to", "в" },
             { "Done", "Выполнено" },
+            { "file_replace_ro_confirm", "Вы действительно хотите удалить файл с атрибутом \"только для чтения\" или \"скрытый\" или \"системный\"?" },
 
             { "folder", "Папка" },
             { "val_byte", "Б" },
