@@ -351,16 +351,20 @@ public class SysFileOperation implements IFileOperation {
 
     private void copy(Path src, Path trg) throws Exception{
         boolean bRewrite = false, bRewriteRO = false;
-        if(bRewriteAll){
-            bRewrite = true;
-        }
-        if(bForceRO){
-            bRewriteRO = true;
-        }
 
         do {
+            if(bRewriteAll){
+                bRewrite = true;
+            }
+            if(bForceRO){
+                bRewriteRO = true;
+            }
+
             try {
                 if(FileUtil.isRO(trg)){
+                    if(!bRewrite && Files.exists(trg)){
+                        throw new FileAlreadyExistsException(trg.toString());
+                    }
                     if(bRewriteRO){
                         FileUtil.cleanRO(trg);
                     }else {

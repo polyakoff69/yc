@@ -42,6 +42,9 @@ public class FileUtil {
 
     public static boolean isRO(Path file){
         File f = file.toFile();
+        if(f.exists()==false){
+            return false;
+        }
         if(f.isHidden() || f.canWrite()==false){
             return true;
         }

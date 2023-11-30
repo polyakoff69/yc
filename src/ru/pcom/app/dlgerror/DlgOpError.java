@@ -24,9 +24,9 @@ import java.io.File;
 import java.util.ResourceBundle;
 
 public class DlgOpError extends Stage {
-  ResourceBundle rs = null;
-  Label labFile = new Label(""), labFileName = new Label(""), labErrMsg = new Label(""), labErr = new Label("");
-  private String item;
+  protected ResourceBundle rs = null;
+  protected Label labFile = new Label(""), labFileName = new Label(""), labErrMsg = new Label(""), labErr = new Label("");
+  protected String item;
   private int result = -1;
 
   public DlgOpError(Stage owner, String title, String item) {
@@ -59,24 +59,8 @@ public class DlgOpError extends Stage {
 
     setScene(scene);
 
-    Button btnR = new Button(rs.getString("Retry"));
-    btnR.setOnAction(evt-> onButton(1));
-    btnR.setMinWidth(UiUtil.getWidgetWidth(75));
-    btnR.setDefaultButton(true);
-
-    Button btnX = new Button(rs.getString("cancel"));
-    btnX.setOnAction(evt-> close());
-    btnX.setMinWidth(UiUtil.getWidgetWidth(75));
-
-    Button btnS = new Button(rs.getString("Skip"));
-    btnS.setOnAction(evt-> onButton(2));
-    btnS.setMinWidth(UiUtil.getWidgetWidth(75));
-
-    Button btnSA = new Button(rs.getString("Skip all"));
-    btnSA.setOnAction(evt-> onButton(3));
-    btnSA.setMinWidth(UiUtil.getWidgetWidth(75));
-
-    HBox paneButtons = new HBox(10, btnR, btnS, btnSA, btnX);
+    Button[] bb = initButtons();
+    HBox paneButtons = new HBox(10, bb);
     paneButtons.setPadding(new Insets(10, 0, 0, 0));
     paneButtons.setAlignment(Pos.BASELINE_CENTER);
     // gridpaneButtons.setHgap(5);
@@ -101,10 +85,9 @@ public class DlgOpError extends Stage {
     // GridPane.setMargin(labErr, new Insets(10, 0, 0, 0));
     // GridPane.setMargin(labErrMsg, new Insets(10, 0, 0, 0));
 
-    GridPane.setHalignment(btnR, HPos.CENTER.RIGHT);
-    GridPane.setHalignment(btnX, HPos.CENTER.RIGHT);
-    GridPane.setHalignment(btnS, HPos.CENTER.RIGHT);
-    GridPane.setHalignment(btnSA, HPos.CENTER.RIGHT);
+    for(Button b : bb) {
+      GridPane.setHalignment(b, HPos.CENTER.RIGHT);
+    }
     GridPane.setHalignment(labFile, HPos.CENTER.RIGHT);
 
     root.getChildren().add(gridpane1);
@@ -124,7 +107,28 @@ public class DlgOpError extends Stage {
     root.setStyle("-fx-background-color: -fx-base;");
   }
 
-  private void onButton(int r){
+  protected Button[] initButtons(){
+    Button btnR = new Button(rs.getString("Retry"));
+    btnR.setOnAction(evt-> onButton(1));
+    btnR.setMinWidth(UiUtil.getWidgetWidth(75));
+    btnR.setDefaultButton(true);
+
+    Button btnX = new Button(rs.getString("cancel"));
+    btnX.setOnAction(evt-> close());
+    btnX.setMinWidth(UiUtil.getWidgetWidth(75));
+
+    Button btnS = new Button(rs.getString("Skip"));
+    btnS.setOnAction(evt-> onButton(2));
+    btnS.setMinWidth(UiUtil.getWidgetWidth(75));
+
+    Button btnSA = new Button(rs.getString("Skip all"));
+    btnSA.setOnAction(evt-> onButton(3));
+    btnSA.setMinWidth(UiUtil.getWidgetWidth(75));
+
+    return new Button[] {btnR, btnS, btnSA, btnX};
+  }
+
+  protected void onButton(int r){
     result = r;
     close();
   }
