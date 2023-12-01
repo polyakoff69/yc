@@ -1,0 +1,1 @@
+start java -cp yc.jar ru.yc.app.Main

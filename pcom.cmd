@@ -1,1 +1,0 @@
-start javaw -cp out\production\pcom ru.pcom.app.Main
