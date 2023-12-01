@@ -5,9 +5,9 @@ import java.util.ListResourceBundle;
 public class Text extends ListResourceBundle {
     public Object[][] getContents() {
         return new Object[][] {
-            { "app", "PCom"},
+            { "app", "Ypsilon Commander"},
             { "lang", "EN"},
-            { "app_ver", "The PCom 1.0 alpha"},
+            { "app_ver", "The Ypsilon Commander 1.0 alpha"},
             { "app_build", "100"},
             { "copyright", "\u00a9 2019-2023 Igor V. Polyakoff, Russia"},
             { "app_descr", "A cross-platform orthodox file manager"},
@@ -28,7 +28,7 @@ public class Text extends ListResourceBundle {
             { "help", "_Help" },
             { "exit", "E_xit" },
             { "about", "_About..." },
-            { "about2", "About PCom" },
+            { "about2", "About Ypsilon Commander" },
 
             { "goto", "_Go To" },
             { "back", "_Back" },
@@ -168,7 +168,7 @@ public class Text extends ListResourceBundle {
 
             { "Language", "Language" },
 
-            {"ask_quit", "Do you want to quit the PCom?"}
+            {"ask_quit", "Do you want to quit the Ypsilon Commander?"}
 
         };
     }

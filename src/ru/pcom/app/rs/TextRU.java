@@ -5,9 +5,9 @@ import java.util.ListResourceBundle;
 public class TextRU extends ListResourceBundle {
     public Object[][] getContents() {
         return new Object[][] {
-            { "app", "PCom"},
+            { "app", "Ypsilon Commander"},
             { "lang", "RU"},
-            { "app_ver", "PCom 1.0 alpha"},
+            { "app_ver", "Ypsilon Commander 1.0 alpha"},
             { "app_build", "100"},
             { "copyright", "\u00a9 2019-2023 Igor V. Polyakoff, РФ"},
             { "app_descr", "Кроссплатформенный ортодоксальный менеджер файлов"},
@@ -30,7 +30,7 @@ public class TextRU extends ListResourceBundle {
             { "exit", "В_ыход" },
 
             { "about", "_О программе..." },
-            { "about2", "О программе PCom" },
+            { "about2", "О программе Ypsilon Commander" },
 
             { "goto", "Пере_йти" },
             { "back", "_Назад" },
@@ -170,7 +170,7 @@ public class TextRU extends ListResourceBundle {
 
             { "Language", "Язык" },
 
-            {"ask_quit", "Закрыть PCom?"}
+            {"ask_quit", "Закрыть Ypsilon Commander?"}
         };
     }
 }

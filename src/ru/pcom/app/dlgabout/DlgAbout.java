@@ -81,20 +81,20 @@ public class DlgAbout extends Stage {
         GridPane.setMargin(sep, new Insets(5,0,5,0));
 
         lab = new Label(rs.getString("web")+": ");
-        Hyperlink hl = new Hyperlink("http://www.pcom.com");
+        Hyperlink hl = new Hyperlink("http://www.yc.com");
         // hl.setTooltip(new Tooltip(rs.getString("open"))); TODO:
         hl.setBorder(Border.EMPTY);
         hl.setPadding(new Insets(0, 0, 0, 0));
-        hl.setOnAction(event -> { openUrl("http://www.pcom.com"); });
+        hl.setOnAction(event -> { openUrl("http://www.yc.com"); });
         HBox hbx1 = new HBox(lab, hl);
         gridpane.add(hbx1, 0, 4);
 
         lab = new Label(rs.getString("email")+": ");
-        hl = new Hyperlink("support@pcom.com");
+        hl = new Hyperlink("support@yc.com");
         // hl.setTooltip(new Tooltip(rs.getString("open"))); TODO:
         hl.setBorder(Border.EMPTY);
         hl.setPadding(new Insets(0, 0, 0, 0));
-        hl.setOnAction(event -> { openUrl("mailto:support@pcom.com"); });
+        hl.setOnAction(event -> { openUrl("mailto:support@yc.com"); });
         hbx1 = new HBox(lab, hl);
         gridpane.add(hbx1, 0, 5);
 

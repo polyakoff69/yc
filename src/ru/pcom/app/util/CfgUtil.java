@@ -14,12 +14,12 @@ public class CfgUtil {
     Config CFG = Config.get();
     try {
       File f = new File(Environ.getHomeFolder());
-      f = new File(f,".pcom");
+      f = new File(f,".yc");
       if(!f.exists()){
         f.mkdir();
       }
-      f = new File(f,"pcom.xml");
-      CFG.getAllProps().storeToXML(new FileOutputStream(f), "PCom configuration", "UTF-8");
+      f = new File(f,"yc.xml");
+      CFG.getAllProps().storeToXML(new FileOutputStream(f), "The Ypsilon Commander configuration", "UTF-8");
     }catch(Exception e){
       MsgBox.showErrorOk(clazz, CFG.getTextResource().getString("err_cfg_wrt")+": " + e.getMessage(), null, null);
     }
@@ -31,7 +31,7 @@ public class CfgUtil {
       if(css1.startsWith("/") || css1.startsWith("\\"))
         css1 = css1.substring(1);
       File f = new File(Environ.getHomeFolder());
-      f = new File(f,".pcom");
+      f = new File(f,".yc");
       f = new File(f,css1);
       if(f.exists() && f.isFile()) {
         String l = "";
@@ -59,7 +59,7 @@ public class CfgUtil {
     Config CFG = Config.get();
     try {
       File f = new File(Environ.getHomeFolder());
-      f = new File(f,".pcom");
+      f = new File(f,".yc");
 
       String font = CFG.getFont();
       int ifsz = CFG.getFontSz();

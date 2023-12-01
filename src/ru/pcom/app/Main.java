@@ -76,8 +76,8 @@ public class Main extends Application {
 
         try {
             File f = new File(Environ.getHomeFolder());
-            f = new File(f,".pcom");
-            f = new File(f,"pcom.xml");
+            f = new File(f,".yc");
+            f = new File(f,"yc.xml");
             Config CFG = Config.get();
             CFG.load(f.getAbsolutePath());
             CFG.setTextResourceL(CFG.getLang());
