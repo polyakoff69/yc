@@ -406,6 +406,12 @@ public abstract class MainFrmMenuToolBars extends MainFrmBase {
         button.setFocusTraversable(false);
         button.setTooltip(new Tooltip(rsTxt.getString("pan100").replace("_","")));
         button.setOnAction(event -> ctr.onCmd("100", null, event));
+        button.setOnMouseClicked(event -> {
+            if (event.isControlDown()) {
+                ctr.onCmd("5050", null, event);
+                event.consume();
+            }
+        });
         tbF11 = button;
         toolBar.getItems().add(button);
 

@@ -40,7 +40,7 @@ public class SysFileOperation implements IFileOperation {
         setSource(s);
         setTarget(t);
     }
-    public void setTarget(String t) throws Exception{
+    public void setTarget(String t) throws Exception{ // TODO: rewrite
         t = transformRel(t);
         t = t.trim();
         t = fixWinRoot(t);
@@ -227,14 +227,14 @@ public class SysFileOperation implements IFileOperation {
     }
 
     public void process(java.util.List files, Controller ctr) throws Exception{
-        List<File> vfiles = new ArrayList<>();
+        List<PathItem> vfiles = new ArrayList<>();
         for(Object o : files){
             FileData fd = (FileData)o;
             if(fd.getInfo()!=null && fd.getInfo().isParent()){
                 continue;
             }
             if(fd.getFile().isFile()){
-                vfiles.add(fd.getFile());
+                vfiles.add(new PathItem(fd.getFile()));
             }
             if(fd.getFile().isDirectory()){
                 process(fd.getFile(), vfiles);
@@ -257,21 +257,13 @@ public class SysFileOperation implements IFileOperation {
         }
 
         try {
-            for (Object o : vfiles) {
-                if (o instanceof Path) {
-                    if (bCopy) {
-                        copy((Path) o);
-                    }
-                    if (bDelete && bDeletePost == false) {
-                        delete((Path) o);
-                    }
+            for (PathItem o : vfiles) {
+                if (bCopy) {
+                    copy(o);
                 }
-                if (o instanceof File) {
-                    if (bCopy) {
-                        copy((File) o);
-                    }
-                    if (bDelete && bDeletePost == false) {
-                        delete((File) o);
+                if (bDelete && bDeletePost == false) {
+                    if(!(bCopy && o.isSkipped())) {
+                        delete(o.toPath());
                     }
                 }
                 cnt++;
@@ -283,17 +275,13 @@ public class SysFileOperation implements IFileOperation {
             }
 
             if (bDelete && bDeletePost) {
-                for (Object o : vfiles) {
+                for (PathItem o : vfiles) {
                     if (dlgOp.isCancelled()) {
                         Platform.runLater(() -> ctr.onCmd("endoper", "", null));
                         return;
                     }
-
-                    if (o instanceof Path) {
-                        delete((Path) o);
-                    }
-                    if (o instanceof File) {
-                        delete((File) o);
+                    if(!(bCopy && o.isSkipped())) {
+                        delete(o.toPath());
                     }
                     cnt++;
                 }
@@ -306,9 +294,8 @@ public class SysFileOperation implements IFileOperation {
         // TODO: on finish
     }
 
-    private void process(File dir, java.util.List files) throws Exception{
+    private void process(File dir, java.util.List<PathItem> files) throws Exception{
         final Path source = dir.toPath();
-        // final Path target = ...
         Files.walkFileTree(source, EnumSet.of(FileVisitOption.FOLLOW_LINKS), Integer.MAX_VALUE,
             new SimpleFileVisitor<Path>() {
                 @Override
@@ -316,7 +303,7 @@ public class SysFileOperation implements IFileOperation {
                     if(dlgOp.isCancelled()){
                         return FileVisitResult.TERMINATE;
                     }
-                    files.add(dir);
+                    files.add(new PathItem(dir));
                     return FileVisitResult.CONTINUE;
                 }
                 @Override
@@ -324,22 +311,18 @@ public class SysFileOperation implements IFileOperation {
                     if(dlgOp.isCancelled()){
                         return FileVisitResult.TERMINATE;
                     }
-                    files.add(file);
+                    files.add(new PathItem(file));
                     return FileVisitResult.CONTINUE;
                 }
             });
     }
 
-    private void copy(File f) throws Exception{
-        copy(f.toPath());
-    }
-
-    private void copy(Path file) throws Exception{
-        if(Files.isDirectory(file)){
-            mkdir(getTargetPath(file));
+    private void copy(PathItem file) throws Exception{
+        if(Files.isDirectory(file.toPath())){
+            mkdir(getTargetPath(file.toPath()));
             return;
         }
-        Path tp = getTargetPath(file);
+        Path tp = getTargetPath(file.toPath());
         System.out.println("COPY : "+file.toFile().getAbsolutePath() +" >> "+tp.toFile().getAbsolutePath());
         updateDlgOp(file.toFile(), tp.toFile());
         Path par = tp.getParent();
@@ -349,7 +332,7 @@ public class SysFileOperation implements IFileOperation {
         copy(file, tp);
     }
 
-    private void copy(Path src, Path trg) throws Exception{
+    private void copy(PathItem src, Path trg) throws Exception{
         boolean bRewrite = false, bRewriteRO = false;
 
         do {
@@ -372,10 +355,11 @@ public class SysFileOperation implements IFileOperation {
                     }
                 }
                 if(bRewrite){
-                    Files.copy(src, trg, StandardCopyOption.REPLACE_EXISTING);
+                    Files.copy(src.toPath(), trg, StandardCopyOption.REPLACE_EXISTING);
                 }else {
-                    Files.copy(src, trg);
+                    Files.copy(src.toPath(), trg);
                 }
+                src.setSkipped(false);
                 break;
             } catch (FileAlreadyExistsException fex){
                 if(bSkipCopyExists){
@@ -724,5 +708,39 @@ class AbortOpException extends RuntimeException {
 class ROException extends AccessDeniedException {
     public ROException(String file){
         super(file);
+    }
+}
+
+class PathItem {
+
+    public PathItem(Path p){
+        setPath(p);
+    }
+
+    public PathItem(File f){
+        setPath(f.toPath());
+    }
+    private Path path;
+    private boolean skipped = true;
+    public boolean isSkipped() {
+        return skipped;
+    }
+
+    public void setSkipped(boolean skipped) {
+        this.skipped = skipped;
+    }
+    public Path getPath() {
+        return path;
+    }
+    public void setPath(Path path) {
+        this.path = path;
+    }
+
+    public File toFile(){
+        return getPath().toFile();
+    }
+
+    public Path toPath(){
+        return getPath();
     }
 }
