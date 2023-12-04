@@ -38,6 +38,6 @@ public class DlgOpWarn extends DlgOpError {
     btnX.setOnAction(evt-> close());
     btnX.setMinWidth(UiUtil.getWidgetWidth(75));
 
-    return new Button[] {btnY, btnA, btnS, btnSA, btnX};  }
+    return new Button[] {btnY, btnA, btnS, btnSA, btnX}; }
 }
 
