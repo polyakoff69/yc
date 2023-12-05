@@ -119,7 +119,7 @@ public class MainFrm extends MainFrmCtrl {
             FilePanel tab = new FilePanel();
             tab.setPath(path);
             String colw = "";
-            if(tabColW.length>i)
+            if(tabColW!=null && tabColW.length>i)
                 colw = tabColW[i];
             tab.onCreate(bLeft, ctr, CFG, colw);
             pane.getTabs().add(tab);
