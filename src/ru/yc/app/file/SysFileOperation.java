@@ -19,11 +19,11 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
-public class SysFileOperation implements IFileOperation {
+public class SysFileOperation extends BaseFileOperation implements IFileOperation {
     private boolean bCopy = false, bDelete = false, bDeletePost = false;
     private boolean bSkipAllMkDirErr = false, bSkipAllCopyErr = false, bSkipAllDelErr = false, bSkipCopyExists = false,
                     bRewriteAll = false, bSkipRO = false, bForceRO = false, bDelROAll = false, bSkipDelRO = false;
-    private String trgFolder, trgNameExt, trgName, trgExt, srcFolder;
+    private String trgFolder, trgNameExt, srcFolder;
     private Path srcPath, trgPath;
     private Config CFG;
     private DlgOperation dlgOp;
@@ -607,48 +607,6 @@ public class SysFileOperation implements IFileOperation {
             File f1 = new File(f.getParentFile(), trgNameExt);
             return f1.toPath();
         }
-    }
-
-    private String applyMask(String fname, String mask){
-        if(mask.contains(".")){
-            int pos = fname.lastIndexOf(".");
-            if(pos<0){
-                return applyMask(fname, trgName);
-            }
-            String fname1 = fname.substring(0,pos);
-            String ext = fname.substring(pos+1);
-            return applyMask(fname1, trgName)+"."+applyMask(ext, trgExt);
-        }
-        if("*".equals(mask)){
-            return fname;
-        }
-        if(mask.startsWith("*")){
-            return fname+mask.substring(1);
-        }
-        int l1 = fname.length();
-        int l2 = mask.length();
-        String ret = "";
-        for(int i=0; (i<l1 || i<l2); i++){
-            char cn = '\0', cm = '\0', c = '\0';
-            if(i<l1){
-                cn = fname.charAt(i);
-            }
-            if(i<l2){
-                cm = mask.charAt(i);
-            }
-            if('?'==cm){
-                c = cn;
-            }else if('*'==cm){
-                ret = ret + fname.substring(i);
-                break;
-            }else{
-                c = cm;
-            }
-            if(c!='\0') {
-                ret = ret + c;
-            }
-        }
-        return ret;
     }
 
     private void updateDlgOp(File fs, File ft){

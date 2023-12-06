@@ -14,6 +14,7 @@ import ru.yc.app.dlgname.DlgInputName;
 import ru.yc.app.dlgoper.DlgDeleteOperation;
 import ru.yc.app.dlgoper.DlgOperation;
 import ru.yc.app.dlgopts.DlgOptions;
+import ru.yc.app.file.BaseFileOperation;
 import ru.yc.app.file.FileData;
 import ru.yc.app.file.IFileOperation;
 import ru.yc.app.file.SysFileOperation;
@@ -276,17 +277,16 @@ public abstract class MainFrmCtrl extends MainFrmMenuToolBars {
             dialog.showAndWait();
             if (dialog.isResult()) {
                 try {
-                    def = dialog.getValue().trim(); // TODO: use [*.*]
+                    def = dialog.getValue().trim();
                     if (def.isEmpty())
                         throw new IllegalArgumentException(CFG.getTextResource().getString("not_specified"));
                     try {
-                        Util.checkFileName(def);
+                        Util.checkFileName(def.replace("*","").replace("?",""));
                     }catch (Exception e1){
                         throw new Exception(CFG.getTextResource().getString("name_invalid_sym"));
                     }
-
                     File p = fileData.getFile();
-                    File f = new File(p.getParentFile(), def);
+                    File f = new File(p.getParentFile(), applyMask(p.getName(), def));
                     if (f.exists()) {
                         if(f.isDirectory())
                             throw new Exception(CFG.getTextResource().getString("folder_exists"));
@@ -467,6 +467,15 @@ public abstract class MainFrmCtrl extends MainFrmMenuToolBars {
         }
 
         Platform.runLater(() -> fp.focus());
+    }
+
+    private String applyMask(String src, String mask){
+        if(mask!=null && mask.contains("*")==false && mask.contains("?")==false){
+            return mask;
+        }
+        BaseFileOperation bfo = new BaseFileOperation();
+        bfo.setTargetNameExt(mask);
+        return bfo.applyMask(src, mask);
     }
 
     public void onEndOper(){
