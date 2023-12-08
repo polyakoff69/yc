@@ -5,6 +5,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -64,12 +65,6 @@ public class DlgOptions3 extends Stage {
 
     setScene(scene);
 
-    GridPane gridpane = new GridPane();
-    gridpane.setPadding(new Insets(10-4, 10+4, 10+4, 10+4));
-    gridpane.setHgap(10);
-    gridpane.setVgap(5);
-    // gridpane.getColumnConstraints().add(new ColumnConstraints(300));
-
     GridPane gridpane1 = new GridPane();
     gridpane1.setPadding(new Insets(0));
     gridpane1.setHgap(5);
@@ -95,6 +90,7 @@ public class DlgOptions3 extends Stage {
     });
 
     gridpane1.add(view3, 0, 0);
+    GridPane.setMargin(view3, new Insets(10+6, 0, 0, 10+6));
 
     int w = Config.get().getFontSz();
     if(w<8 || w>50){
@@ -117,29 +113,29 @@ public class DlgOptions3 extends Stage {
     onCard("general");
 
     gridpane1.add(cardsPane, 1, 0);
-    gridpane1.add(gridpane, 1, 1);
-    // GridPane.setMargin(gridpane, new Insets(0, 0, 0, 10));
 
     Button btnOk = new Button("OK");
     btnOk.setOnAction(evt-> onSave());
     btnOk.setMinWidth(UiUtil.getWidgetWidth(75));
-    gridpane.add(btnOk, 1-1, 0);
 
     Button btnX = new Button(rs.getString("cancel"));
     btnX.setOnAction(evt-> close());
     btnX.setMinWidth(UiUtil.getWidgetWidth(75));
-    gridpane.add(btnX, 2-1, 0);
 
     Button btnHlp = new Button(rs.getString("help2"));
     btnHlp.setDisable(true);
     // btnHlp.setOnAction();
     btnHlp.setMinWidth(UiUtil.getWidgetWidth(75));
-    gridpane.add(btnHlp, 3-1, 0);
 
-    GridPane.setHalignment(btnOk, HPos.CENTER.RIGHT);
-    GridPane.setHalignment(btnX, HPos.CENTER.RIGHT);
-    GridPane.setHalignment(btnHlp, HPos.CENTER.RIGHT);
-    GridPane.setHalignment(gridpane, HPos.RIGHT);
+    HBox hbx = new HBox(btnOk, btnX, btnHlp);
+    hbx.setSpacing(10);
+    hbx.setAlignment(Pos.BOTTOM_RIGHT);
+    hbx.setPadding(new Insets(10,10+4,10+4,10));
+
+    GridPane.setHalignment(btnOk, HPos.RIGHT);
+    GridPane.setHalignment(btnX, HPos.RIGHT);
+    GridPane.setHalignment(btnHlp, HPos.RIGHT);
+    gridpane1.add(hbx, 0, 1, 2, 1);
 
     root.getChildren().add(gridpane1);
 
@@ -153,7 +149,7 @@ public class DlgOptions3 extends Stage {
     Stage stage = (Stage) getScene().getWindow();
     stage.getIcons().add(new Image(getClass().getResourceAsStream("/app.png")));
 
-    gridpane.getStyleClass().add("dlg-wnd");
+    hbx.getStyleClass().add("dlg-wnd");
     gridpane1.getStyleClass().add("dlg-wnd");
     root.setStyle("-fx-background-color: -fx-base;");
   }
