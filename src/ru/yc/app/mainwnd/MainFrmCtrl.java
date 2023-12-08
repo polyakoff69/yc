@@ -14,6 +14,7 @@ import ru.yc.app.dlgname.DlgInputName;
 import ru.yc.app.dlgoper.DlgDeleteOperation;
 import ru.yc.app.dlgoper.DlgOperation;
 import ru.yc.app.dlgopts.DlgOptions;
+import ru.yc.app.dlgopts.DlgOptions3;
 import ru.yc.app.file.BaseFileOperation;
 import ru.yc.app.file.FileData;
 import ru.yc.app.file.IFileOperation;
@@ -571,7 +572,7 @@ public abstract class MainFrmCtrl extends MainFrmMenuToolBars {
     }
 
     public  void onOptions(Object param){
-        DlgOptions dlg = new DlgOptions(getPrimStage());
+        DlgOptions3 dlg = new DlgOptions3(getPrimStage());
         dlg.showAndWait();
         if(dlg.isResult()) {
             CfgUtil.saveCfg(getClass());

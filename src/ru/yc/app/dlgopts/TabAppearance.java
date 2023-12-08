@@ -16,11 +16,15 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class TabAppearance implements ICallback {
-  DlgOptions parent;
+  DlgOptions3 parent;
   ChoiceBox<String> cbxFont, cbxFontSz;
   private Label labSample;
 
   public Region buildTab(ResourceBundle rs, DlgOptions parent){
+    return null;
+  }
+
+  public Region buildTab(ResourceBundle rs, DlgOptions3 parent){
     this.parent = parent;
     Config cfg = Config.get();
 

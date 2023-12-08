@@ -22,6 +22,10 @@ public class TabGeneral implements ICallback {
     ChoiceBox<Option> cbxUnit;
 
     public Region buildTab(ResourceBundle rs, DlgOptions parent){
+        return null;
+    }
+
+    public Region buildTab(ResourceBundle rs, DlgOptions3 parent){
         Config cfg = Config.get();
 
         GridPane pane = new GridPane();

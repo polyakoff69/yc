@@ -16,10 +16,14 @@ import java.util.Arrays;
 import java.util.ResourceBundle;
 
 public class TabLang implements ICallback {
-  DlgOptions parent;
+  DlgOptions3 parent;
   ChoiceBox<Option> cbxLang;
 
   public Region buildTab(ResourceBundle rs, DlgOptions parent){
+    return null;
+  }
+
+  public Region buildTab(ResourceBundle rs, DlgOptions3 parent){
     this.parent = parent;
     Config cfg = Config.get();
 
