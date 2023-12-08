@@ -84,7 +84,7 @@ public class DlgOptions3 extends Stage {
     tiRoot.getChildren().add(tiLanguage);
 
     TreeView<Pair> view3 = new TreeView<Pair>(tiRoot);
-    view3.setPrefSize(150, 150);
+    view3.setPrefSize(180, 150);
     view3.setShowRoot(false);
     view3.getSelectionModel().selectedItemProperty().addListener( new ChangeListener() {
       @Override
@@ -139,6 +139,7 @@ public class DlgOptions3 extends Stage {
     GridPane.setHalignment(btnOk, HPos.CENTER.RIGHT);
     GridPane.setHalignment(btnX, HPos.CENTER.RIGHT);
     GridPane.setHalignment(btnHlp, HPos.CENTER.RIGHT);
+    GridPane.setHalignment(gridpane, HPos.RIGHT);
 
     root.getChildren().add(gridpane1);
 
