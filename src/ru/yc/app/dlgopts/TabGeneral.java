@@ -37,24 +37,24 @@ public class TabGeneral extends TabBase implements ICallback {
 
         labTitle = getTitleLabel(title);
         pane.add(labTitle,0,0, 2, 1);
-        GridPane.setMargin(labTitle, new Insets(2, 0, 0, 10+4));
+        GridPane.setMargin(labTitle, new Insets(2, 0, 0, 4));
 
         cbHideFiles = new CheckBox(rs.getString("hide_files"));
         pane.add(cbHideFiles,0,1, 2, 1);
-        GridPane.setMargin(cbHideFiles, new Insets(0+4, 0, 0, 10+4));
+        GridPane.setMargin(cbHideFiles, new Insets(0+4, 0, 0, 4));
 
         cbEagerLoad = new CheckBox(rs.getString("eager_load"));
         pane.add(cbEagerLoad,0,2, 2, 1);
-        GridPane.setMargin(cbEagerLoad, new Insets(0, 0, 0, 10+4));
+        GridPane.setMargin(cbEagerLoad, new Insets(0, 0, 0, 4));
 
         CheckBox cb = new CheckBox(rs.getString("read_on_activ"));
         pane.add(cb,0,3, 2 ,1);
-        GridPane.setMargin(cb, new Insets(0, 0, 0, 10+4));
+        GridPane.setMargin(cb, new Insets(0, 0, 0, 4));
         cbReanOnAct = cb;
 
         labUnit = new Label(rs.getString("sz_unit")+":");
         pane.add(labUnit,0,4, 1, 1);
-        GridPane.setMargin(labUnit, new Insets(0, 0, 0, 10+4));
+        GridPane.setMargin(labUnit, new Insets(0, 0, 0, 4));
 
         Option[] oo = new Option[3];
         oo[0] = new Option(0, rs.getString("auto"));

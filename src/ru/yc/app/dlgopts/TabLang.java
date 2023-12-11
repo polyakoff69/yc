@@ -37,11 +37,11 @@ public class TabLang extends TabBase implements ICallback {
 
     labTitle = getTitleLabel(title);
     pane.add(labTitle,0,0);
-    GridPane.setMargin(labTitle, new Insets(2, 0, 2, 10+4));
+    GridPane.setMargin(labTitle, new Insets(2, 0, 2, 4));
 
     Label lab = new Label(rs.getString("Language")+":");
     pane.add(lab,0,1);
-    GridPane.setMargin(lab, new Insets(0+4, 0, 0, 10+4));
+    GridPane.setMargin(lab, new Insets(0+4, 0, 0, 4));
 
     Option[] oo = getLanguages();
     ObservableList<Option> v = FXCollections.observableArrayList(oo);

@@ -38,11 +38,11 @@ public class TabAppearance extends TabBase implements ICallback {
     labTitle = getTitleLabel(title);
 
     pane.add(labTitle,0,0, 2, 1);
-    GridPane.setMargin(labTitle, new Insets(2, 0, 2, 10+4));
+    GridPane.setMargin(labTitle, new Insets(2, 0, 2, 4));
 
     Label lab = new Label(rs.getString("Font")+":");
     pane.add(lab,0,1);
-    GridPane.setMargin(lab, new Insets(0+4, 0, 0, 10+4));
+    GridPane.setMargin(lab, new Insets(0+4, 0, 0, 4));
 
     ObservableList<String> fonts = FXCollections.observableArrayList(getFonts());
     cbxFont = new ChoiceBox<String>(fonts);
