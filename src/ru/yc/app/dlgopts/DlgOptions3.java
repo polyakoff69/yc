@@ -100,15 +100,15 @@ public class DlgOptions3 extends Stage {
 
     TabGeneral ts = new TabGeneral();
     tabs.add(ts);
-    cards.put("general", ts.buildTab(rs, this));
+    cards.put("general", ts.buildTab(rs, this, rs.getString("General")));
 
     TabAppearance ta = new TabAppearance();
     tabs.add(ta);
-    cards.put("appearance", ta.buildTab(rs, this));
+    cards.put("appearance", ta.buildTab(rs, this, rs.getString("Appearance")));
 
     TabLang tl = new TabLang();
     tabs.add(tl);
-    cards.put("language", tl.buildTab(rs, this));
+    cards.put("language", tl.buildTab(rs, this, rs.getString("Language").replace("_","")));
 
     onCard("general");
 

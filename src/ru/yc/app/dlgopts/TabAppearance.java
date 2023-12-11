@@ -15,52 +15,57 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-public class TabAppearance implements ICallback {
+public class TabAppearance extends TabBase implements ICallback {
   DlgOptions3 parent;
   ChoiceBox<String> cbxFont, cbxFontSz;
-  private Label labSample;
+  private Label labSample, labTitle;
 
   public Region buildTab(ResourceBundle rs, DlgOptions parent){
     return null;
   }
 
-  public Region buildTab(ResourceBundle rs, DlgOptions3 parent){
+  public Region buildTab(ResourceBundle rs, DlgOptions3 parent, String title){
     this.parent = parent;
     Config cfg = Config.get();
 
     GridPane pane = new GridPane();
-    pane.getStyleClass().add("dlg-tab-container");
+    // pane.getStyleClass().add("dlg-tab-container");
     pane.setPadding(new Insets(10));
     pane.setHgap(5);
     pane.setVgap(5);
     // pane.setStyle("-fx-border-color: #000000; -fx-border-width: 1 1 1 1");
 
+    labTitle = getTitleLabel(title);
+
+    pane.add(labTitle,0,0, 2, 1);
+    GridPane.setMargin(labTitle, new Insets(2, 0, 2, 10+4));
+
     Label lab = new Label(rs.getString("Font")+":");
-    pane.add(lab,0,0);
+    pane.add(lab,0,1);
     GridPane.setMargin(lab, new Insets(0+4, 0, 0, 10+4));
 
     ObservableList<String> fonts = FXCollections.observableArrayList(getFonts());
     cbxFont = new ChoiceBox<String>(fonts);
     // cbxFont.setValue("Java");
-    pane.add(cbxFont,1,0);
+    pane.add(cbxFont,1,1);
     lab.setLabelFor(cbxFont);
 
     ObservableList<String> sz = FXCollections.observableArrayList(getSz());
     cbxFontSz = new ChoiceBox<String>(sz);
     cbxFontSz.setValue("12");
-    pane.add(cbxFontSz,2,0);
+    pane.add(cbxFontSz,2,1);
 
     labSample = new Label(rs.getString("quick_fox"));
     labSample.setMaxWidth(400);
     labSample.setWrapText(true);
-    pane.add(labSample,1,1,2,1);
+    pane.add(labSample,1,2,2,1);
     cbxFont.setOnAction(event -> setFontSample(cbxFont.getValue(),cbxFontSz.getValue()));
     cbxFontSz.setOnAction(event -> setFontSample(cbxFont.getValue(),cbxFontSz.getValue()));
 
     javafx.scene.image.Image image = new javafx.scene.image.Image(getClass().getResourceAsStream("/ico_i.png"));
     Label labi = new Label(rs.getString("font_reload_app"));
     labi.setGraphic(new ImageView(image));
-    pane.add(labi,1,2,2,1);
+    pane.add(labi,1,3,2,1);
     GridPane.setMargin(labi, new Insets(6, 10, 0, 0));
     GridPane.setMargin(labSample, new Insets(6, 10, 0, 0));
     GridPane.setMargin(cbxFont, new Insets(0+4, 0, 0, 0));

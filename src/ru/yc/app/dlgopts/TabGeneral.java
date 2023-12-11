@@ -15,41 +15,45 @@ import ru.yc.app.ICallback;
 import java.util.Arrays;
 import java.util.ResourceBundle;
 
-public class TabGeneral implements ICallback {
+public class TabGeneral extends TabBase implements ICallback {
 
     CheckBox cbEagerLoad, cbReanOnAct, cbHideFiles;
-    Label labUnit;
+    Label labUnit, labTitle;
     ChoiceBox<Option> cbxUnit;
 
     public Region buildTab(ResourceBundle rs, DlgOptions parent){
         return null;
     }
 
-    public Region buildTab(ResourceBundle rs, DlgOptions3 parent){
+    public Region buildTab(ResourceBundle rs, DlgOptions3 parent, String title){
         Config cfg = Config.get();
 
         GridPane pane = new GridPane();
-        pane.getStyleClass().add("dlg-tab-container");
+        // pane.getStyleClass().add("dlg-tab-container");
         pane.setPadding(new Insets(10));
         pane.setHgap(10);
         pane.setVgap(10);
         // pane.setStyle("-fx-border-color: #000000; -fx-border-width: 1 1 1 1");
 
+        labTitle = getTitleLabel(title);
+        pane.add(labTitle,0,0, 2, 1);
+        GridPane.setMargin(labTitle, new Insets(2, 0, 0, 10+4));
+
         cbHideFiles = new CheckBox(rs.getString("hide_files"));
-        pane.add(cbHideFiles,0,0, 2, 1);
+        pane.add(cbHideFiles,0,1, 2, 1);
         GridPane.setMargin(cbHideFiles, new Insets(0+4, 0, 0, 10+4));
 
         cbEagerLoad = new CheckBox(rs.getString("eager_load"));
-        pane.add(cbEagerLoad,0,1, 2, 1);
+        pane.add(cbEagerLoad,0,2, 2, 1);
         GridPane.setMargin(cbEagerLoad, new Insets(0, 0, 0, 10+4));
 
         CheckBox cb = new CheckBox(rs.getString("read_on_activ"));
-        pane.add(cb,0,2, 2 ,1);
+        pane.add(cb,0,3, 2 ,1);
         GridPane.setMargin(cb, new Insets(0, 0, 0, 10+4));
         cbReanOnAct = cb;
 
         labUnit = new Label(rs.getString("sz_unit")+":");
-        pane.add(labUnit,0,3, 1, 1);
+        pane.add(labUnit,0,4, 1, 1);
         GridPane.setMargin(labUnit, new Insets(0, 0, 0, 10+4));
 
         Option[] oo = new Option[3];
@@ -58,7 +62,7 @@ public class TabGeneral implements ICallback {
         oo[2] = new Option(2, rs.getString("val_kb"));
         ObservableList<Option> v = FXCollections.observableArrayList(oo);
         cbxUnit = new ChoiceBox<Option>(v);
-        pane.add(cbxUnit,1,3);
+        pane.add(cbxUnit,1,4);
         labUnit.setLabelFor(cbxUnit);
 
         cbEagerLoad.setSelected(cfg.isEagerLoad());

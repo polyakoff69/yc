@@ -15,40 +15,45 @@ import ru.yc.app.ICallback;
 import java.util.Arrays;
 import java.util.ResourceBundle;
 
-public class TabLang implements ICallback {
+public class TabLang extends TabBase implements ICallback {
   DlgOptions3 parent;
   ChoiceBox<Option> cbxLang;
+  Label labTitle;
 
   public Region buildTab(ResourceBundle rs, DlgOptions parent){
     return null;
   }
 
-  public Region buildTab(ResourceBundle rs, DlgOptions3 parent){
+  public Region buildTab(ResourceBundle rs, DlgOptions3 parent, String title){
     this.parent = parent;
     Config cfg = Config.get();
 
     GridPane pane = new GridPane();
-    pane.getStyleClass().add("dlg-tab-container");
+    // pane.getStyleClass().add("dlg-tab-container");
     pane.setPadding(new Insets(10));
     pane.setHgap(5);
     pane.setVgap(5);
     // pane.setStyle("-fx-border-color: #000000; -fx-border-width: 1 1 1 1");
 
+    labTitle = getTitleLabel(title);
+    pane.add(labTitle,0,0);
+    GridPane.setMargin(labTitle, new Insets(2, 0, 2, 10+4));
+
     Label lab = new Label(rs.getString("Language")+":");
-    pane.add(lab,0,0);
+    pane.add(lab,0,1);
     GridPane.setMargin(lab, new Insets(0+4, 0, 0, 10+4));
 
     Option[] oo = getLanguages();
     ObservableList<Option> v = FXCollections.observableArrayList(oo);
     cbxLang = new ChoiceBox<Option>(v);
-    pane.add(cbxLang,1,0);
+    pane.add(cbxLang,1,1);
     GridPane.setMargin(cbxLang, new Insets(0+4, 0, 0, 0));
     lab.setLabelFor(cbxLang);
 
     javafx.scene.image.Image image = new javafx.scene.image.Image(getClass().getResourceAsStream("/ico_i.png"));
     Label labi = new Label(rs.getString("lang_reload_app"));
     labi.setGraphic(new ImageView(image));
-    pane.add(labi,1,1);
+    pane.add(labi,1,2);
     GridPane.setMargin(labi, new Insets(6, 10, 0, 0));
 
     String l = cfg.getLang();
