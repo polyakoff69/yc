@@ -36,7 +36,7 @@ public class TabLang extends TabBase implements ICallback {
     // pane.setStyle("-fx-border-color: #000000; -fx-border-width: 1 1 1 1");
 
     labTitle = getTitleLabel(title);
-    pane.add(labTitle,0,0);
+    pane.add(labTitle,0,0, 2, 1);
     GridPane.setMargin(labTitle, new Insets(2, 0, 2, 4));
 
     Label lab = new Label(rs.getString("Language")+":");
