@@ -38,15 +38,16 @@ public class TabViewEdit extends TabBase implements ICallback {
     ToolBar tb = new ToolBar();
     tb.getStyleClass().add("file-panel-toolbar");
 
-    Label labInfo = new Label(" "+cfg.getTextResource().getString("File_mask_prior")+" ");
+    Label labInfo = new Label(cfg.getTextResource().getString("File_mask_prior")+" ");
     BorderPane p = new BorderPane();
-    p.setCenter(labInfo);
+    p.setLeft(labInfo);
     HBox hb = new HBox();
     hb.setHgrow(p, Priority.ALWAYS);
-    labInfo.setAlignment(Pos.CENTER_LEFT);
+    labInfo.setAlignment(Pos.BOTTOM_LEFT);
     hb.setFillHeight(true);
-    hb.setAlignment(Pos.CENTER_LEFT);
+    hb.setAlignment(Pos.BOTTOM_LEFT);
     tb.getItems().add(p);
+    BorderPane.setMargin(labInfo, new Insets(6,4,0,4));
 
     Button tbAdd = new Button("");
     tbAdd.setFocusTraversable(false);
