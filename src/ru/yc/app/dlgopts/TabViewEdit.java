@@ -59,11 +59,11 @@ public class TabViewEdit extends TabBase implements ICallback {
     tb.setFocusTraversable(false);
 
     pane.add(tb,0,1, 1, 1);
-    GridPane.setMargin(tb, new Insets(0, 6, 0, 0));
+    GridPane.setMargin(tb, new Insets(0, 6, 0, 4));
 
     list = new ListView<>();
     pane.add(list,0,2, 1, 1);
-    GridPane.setMargin(list, new Insets(0, 6, 0, 0));
+    GridPane.setMargin(list, new Insets(0, 6, 0, 4));
 
     thisPane = pane;
 
