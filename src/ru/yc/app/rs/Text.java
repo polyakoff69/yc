@@ -172,6 +172,10 @@ public class Text extends ListResourceBundle {
             { "Viewers", "Viewers" },
             { "Editors", "Editors" },
             { "File_mask_prior", "File mask priority list" },
+            { "Create", "Create" },
+            { "Edit3", "Edit" },
+            { "Move up", "Move up" },
+            { "Move down", "Move down" },
 
             {"ask_quit", "Do you want to quit the Ypsilon Commander?"}
 

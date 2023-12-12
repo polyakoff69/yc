@@ -50,11 +50,43 @@ public class TabViewEdit extends TabBase implements ICallback {
 
     Button tbAdd = new Button("");
     tbAdd.setFocusTraversable(false);
-    tbAdd.setTooltip(new Tooltip(cfg.getTextResource().getString("root_folder")));
-    Image image = new Image(getClass().getResourceAsStream("/ico_rootw.png"));
+    tbAdd.setTooltip(new Tooltip(cfg.getTextResource().getString("Create")));
+    Image image = new Image(getClass().getResourceAsStream("/ico_new.png"));
     tbAdd.setGraphic(new ImageView(image));
     // button.setOnAction(evt -> ctr.onCmd("root_folder", (bLeft ? "left" : "right"), evt));
     tb.getItems().add(tbAdd);
+
+    Button tbEdit = new Button("");
+    tbEdit.setFocusTraversable(false);
+    tbEdit.setTooltip(new Tooltip(cfg.getTextResource().getString("Edit3")));
+    image = new Image(getClass().getResourceAsStream("/ico_edit.png"));
+    tbEdit.setGraphic(new ImageView(image));
+    // button.setOnAction(evt -> ctr.onCmd("root_folder", (bLeft ? "left" : "right"), evt));
+    tb.getItems().add(tbEdit);
+
+    Button tbDel = new Button("");
+    tbDel.setFocusTraversable(false);
+    tbDel.setTooltip(new Tooltip(cfg.getTextResource().getString("delete")));
+    image = new Image(getClass().getResourceAsStream("/ico_del.png"));
+    tbDel.setGraphic(new ImageView(image));
+    // button.setOnAction(evt -> ctr.onCmd("root_folder", (bLeft ? "left" : "right"), evt));
+    tb.getItems().add(tbDel);
+
+    Button tbUp = new Button("");
+    tbUp.setFocusTraversable(false);
+    tbUp.setTooltip(new Tooltip(cfg.getTextResource().getString("Move up")));
+    image = new Image(getClass().getResourceAsStream("/ico_arru.png"));
+    tbUp.setGraphic(new ImageView(image));
+    // button.setOnAction(evt -> ctr.onCmd("root_folder", (bLeft ? "left" : "right"), evt));
+    tb.getItems().add(tbUp);
+
+    Button tbDn = new Button("");
+    tbDn.setFocusTraversable(false);
+    tbDn.setTooltip(new Tooltip(cfg.getTextResource().getString("Move down")));
+    image = new Image(getClass().getResourceAsStream("/ico_arrd.png"));
+    tbDn.setGraphic(new ImageView(image));
+    // button.setOnAction(evt -> ctr.onCmd("root_folder", (bLeft ? "left" : "right"), evt));
+    tb.getItems().add(tbDn);
 
     tb.setFocusTraversable(false);
 

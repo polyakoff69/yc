@@ -174,6 +174,10 @@ public class TextRU extends ListResourceBundle {
             { "Viewers", "Средства просмотра" },
             { "Editors", "Редакторы" },
             { "File_mask_prior", "Маски имен файлов в порядке приоритета" },
+            { "Create", "Создать" },
+            { "Edit3", "Изменить" },
+            { "Move up", "Переместить вверх" },
+            { "Move down", "Переместить вниз" },
 
             {"ask_quit", "Закрыть Ypsilon Commander?"}
         };
