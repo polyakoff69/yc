@@ -34,6 +34,7 @@ public class DlgOptions3 extends Stage {
   Pane cardsPane = new StackPane();
   java.util.List<ICallback> tabs = new ArrayList<>();
   java.util.Map<String, Region> cards = new LinkedHashMap<>();
+  java.util.Map<String, TabBase> mtabs = new LinkedHashMap<>();
   private boolean result = false;
 
   public DlgOptions3(Stage owner) {
@@ -74,9 +75,15 @@ public class DlgOptions3 extends Stage {
     TreeItem<Pair> tiGeneral = new TreeItem<Pair>(new Pair("general", rs.getString("General")));
     TreeItem<Pair> tiAppearance = new TreeItem<Pair>(new Pair("appearance", rs.getString("Appearance")));
     TreeItem<Pair> tiLanguage = new TreeItem<Pair>(new Pair("language", rs.getString("Language").replace("_","")));
+    TreeItem<Pair> tiVE = new TreeItem<Pair>(new Pair("view+edit", rs.getString("Viewers and editors")));
+    TreeItem<Pair> tiView = new TreeItem<Pair>(new Pair("viewers", rs.getString("Viewers")));
+    TreeItem<Pair> tiEdit = new TreeItem<Pair>(new Pair("editors", rs.getString("Editors")));
     tiRoot.getChildren().add(tiGeneral);
     tiRoot.getChildren().add(tiAppearance);
     tiRoot.getChildren().add(tiLanguage);
+    tiRoot.getChildren().add(tiVE);
+    tiVE.getChildren().add(tiView);
+    tiVE.getChildren().add(tiEdit);
 
     TreeView<Pair> view3 = new TreeView<Pair>(tiRoot);
     view3.setPrefSize(180, 150);
@@ -98,17 +105,7 @@ public class DlgOptions3 extends Stage {
     }
     cardsPane.setPrefWidth(w*50);
 
-    TabGeneral ts = new TabGeneral();
-    tabs.add(ts);
-    cards.put("general", ts.buildTab(rs, this, rs.getString("General")));
-
-    TabAppearance ta = new TabAppearance();
-    tabs.add(ta);
-    cards.put("appearance", ta.buildTab(rs, this, rs.getString("Appearance")));
-
-    TabLang tl = new TabLang();
-    tabs.add(tl);
-    cards.put("language", tl.buildTab(rs, this, rs.getString("Language").replace("_","")));
+    initPages();
 
     onCard("general");
 
@@ -154,6 +151,38 @@ public class DlgOptions3 extends Stage {
     root.setStyle("-fx-background-color: -fx-base;");
   }
 
+  private void initPages(){
+    TabGeneral ts = new TabGeneral();
+    tabs.add(ts);
+    cards.put("general", ts.buildTab(rs, this, rs.getString("General")));
+    mtabs.put("general", ts);
+
+    TabAppearance ta = new TabAppearance();
+    tabs.add(ta);
+    cards.put("appearance", ta.buildTab(rs, this, rs.getString("Appearance")));
+    mtabs.put("appearance", ta);
+
+    TabLang tl = new TabLang();
+    tabs.add(tl);
+    cards.put("language", tl.buildTab(rs, this, rs.getString("Language").replace("_","")));
+    mtabs.put("language", tl);
+
+    TabEmpty tve = new TabEmpty();
+    tabs.add(tve);
+    cards.put("view+edit", tve.buildTab(rs, this, rs.getString("Viewers and editors")));
+    mtabs.put("view+edit", tve);
+
+    TabViewEdit tv = new TabViewEdit();
+    tabs.add(tv);
+    cards.put("viewers", tv.buildTab(rs, this, rs.getString("Viewers")));
+    mtabs.put("viewers", tv);
+
+    TabViewEdit te = new TabViewEdit();
+    tabs.add(te);
+    cards.put("editors", te.buildTab(rs, this, rs.getString("Editors")));
+    mtabs.put("editors", te);
+  }
+
   private void onCard(Pair item){
     onCard(item.id);
   }
@@ -162,6 +191,13 @@ public class DlgOptions3 extends Stage {
     Region r = cards.get(id);
     cardsPane.getChildren().clear();
     cardsPane.getChildren().add(r);
+    // r.prefWidthProperty().bind(cardsPane.widthProperty());
+    r.setPrefWidth(cardsPane.getWidth()-20);
+
+    TabBase tab = mtabs.get(id);
+    if(tab!=null){
+      tab.setPrefW(cardsPane.getWidth()-20);
+    }
   }
 
   private void onSave(){

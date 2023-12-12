@@ -168,6 +168,11 @@ public class Text extends ListResourceBundle {
 
             { "Language", "Language" },
 
+            { "Viewers and editors", "Viewers and editors" },
+            { "Viewers", "Viewers" },
+            { "Editors", "Editors" },
+            { "File_mask_prior", "File mask priority list" },
+
             {"ask_quit", "Do you want to quit the Ypsilon Commander?"}
 
         };
