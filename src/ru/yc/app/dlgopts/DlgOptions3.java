@@ -86,7 +86,7 @@ public class DlgOptions3 extends Stage {
     tiVE.getChildren().add(tiEdit);
 
     TreeView<Pair> view3 = new TreeView<Pair>(tiRoot);
-    view3.setPrefSize(180, 150);
+    view3.setPrefSize(180, 400);
     view3.setShowRoot(false);
     view3.getSelectionModel().selectedItemProperty().addListener( new ChangeListener() {
       @Override

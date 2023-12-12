@@ -33,7 +33,7 @@ public class TabViewEdit extends TabBase implements ICallback {
 
     Label labTitle = getTitleLabel(title);
     pane.add(labTitle,0,0, 1, 1);
-    GridPane.setMargin(labTitle, new Insets(2, 0, 2+5, 4));
+    GridPane.setMargin(labTitle, new Insets(2, 5, 2+5, 4));
 
     ToolBar tb = new ToolBar();
     tb.getStyleClass().add("file-panel-toolbar");
@@ -59,9 +59,11 @@ public class TabViewEdit extends TabBase implements ICallback {
     tb.setFocusTraversable(false);
 
     pane.add(tb,0,1, 1, 1);
+    GridPane.setMargin(tb, new Insets(0, 6, 0, 0));
 
     list = new ListView<>();
     pane.add(list,0,2, 1, 1);
+    GridPane.setMargin(list, new Insets(0, 6, 0, 0));
 
     thisPane = pane;
 
@@ -72,6 +74,7 @@ public class TabViewEdit extends TabBase implements ICallback {
     super.setPrefW(w);
     thisPane.setPrefWidth(w);
     list.setPrefWidth(w);
+    list.setPrefHeight(340);
   }
 
   public Object onAction(Object o){
