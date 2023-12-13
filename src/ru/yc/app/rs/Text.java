@@ -176,6 +176,12 @@ public class Text extends ListResourceBundle {
             { "Edit3", "Edit" },
             { "Move up", "Move up" },
             { "Move down", "Move down" },
+            { "Viewer", "Viewer" },
+            { "External viewer", "External viewer" },
+            { "Command", "Command" },
+            { "Parameters", "Parameters" },
+            { "Working folder", "Working folder" },
+            { "Environment variables", "Environment variables" },
 
             {"ask_quit", "Do you want to quit the Ypsilon Commander?"}
 

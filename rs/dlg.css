@@ -114,3 +114,22 @@
 .tree-cell:filled:selected {
    -fx-background-color: #3E6DB6;
 }
+
+/* ====================================================== */
+
+.bordered-titled-title {
+    /* -fx-background-color: white; */
+    -fx-translate-y: -16;
+}
+
+.bordered-titled-border {
+    -fx-content-display: top;
+    -fx-border-insets: 8 8 6 4;
+    /* -fx-background-color: white; */
+    -fx-border-color: lightgray;
+    -fx-border-width: 1;
+}
+
+.bordered-titled-content {
+    -fx-padding: 10 10 10 10;
+}

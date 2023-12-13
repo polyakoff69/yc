@@ -16,6 +16,9 @@ public class TabViewEdit extends TabBase implements ICallback {
 
   private Pane thisPane;
   private ListView<String> list;
+  private ComboBox<String> cbxMode;
+  private Label labMode;
+  private TextField edCmd, edEnv, edDir, edPar;
 
   public Region buildTab(ResourceBundle rs, DlgOptions parent){
     return null;
@@ -32,7 +35,7 @@ public class TabViewEdit extends TabBase implements ICallback {
     // pane.setStyle("-fx-border-color: #000000; -fx-border-width: 1 1 1 1");
 
     Label labTitle = getTitleLabel(title);
-    pane.add(labTitle,0,0, 1, 1);
+    pane.add(labTitle,0,0, 2, 1);
     GridPane.setMargin(labTitle, new Insets(2, 5, 2+5, 4));
 
     ToolBar tb = new ToolBar();
@@ -91,23 +94,67 @@ public class TabViewEdit extends TabBase implements ICallback {
 
     tb.setFocusTraversable(false);
 
-    pane.add(tb,0,1, 1, 1);
+    pane.add(tb,0,1, 2, 1);
     GridPane.setMargin(tb, new Insets(0, 6, 0, 4));
 
     list = new ListView<>();
-    pane.add(list,0,2, 1, 1);
+    pane.add(list,0,2, 2, 1);
     GridPane.setMargin(list, new Insets(0, 6, 0, 4));
+
+    buildForm(cfg, pane);
 
     thisPane = pane;
 
     return pane;
   }
 
+  private void buildForm(Config CFG, GridPane pane){
+    labMode = new Label(CFG.getTextResource().getString("Viewer")+": ");
+    pane.add(labMode,0,3, 1, 1);
+    GridPane.setMargin(labMode, new Insets(10, 0, 10, 4));
+
+    cbxMode = new ComboBox<>();
+    pane.add(cbxMode,1,3, 1, 1);
+    GridPane.setMargin(cbxMode, new Insets(10, 8, 10, 6));
+
+    GridPane pane1 = new GridPane();
+    // pane.getStyleClass().add("dlg-tab-container");
+    pane1.setPadding(new Insets(10));
+    pane1.setHgap(5);
+    pane1.setVgap(5);
+    ru.yc.app.gui.BorderedTitledPane grpPane = new ru.yc.app.gui.BorderedTitledPane(CFG.getTextResource().getString("External viewer"), pane1);
+    pane.add(grpPane,0,4, 2, 1);
+
+    Label lab = new Label(CFG.getTextResource().getString("Command")+":");
+    pane1.add(lab, 0, 0);
+
+    edCmd = new TextField();
+    pane1.add(edCmd, 1, 0);
+
+    lab = new Label(CFG.getTextResource().getString("Parameters")+":");
+    pane1.add(lab, 0, 1);
+
+    edPar = new TextField();
+    pane1.add(edPar, 1, 1);
+
+    lab = new Label(CFG.getTextResource().getString("Environment variables")+":");
+    pane1.add(lab, 0, 2);
+
+    edEnv = new TextField();
+    pane1.add(edEnv, 1, 2);
+
+    lab = new Label(CFG.getTextResource().getString("Working folder")+":");
+    pane1.add(lab, 0, 3);
+
+    edDir = new TextField();
+    pane1.add(edDir, 1, 3);
+  }
+
   public void setPrefW(double w){
     super.setPrefW(w);
     thisPane.setPrefWidth(w);
     list.setPrefWidth(w);
-    list.setPrefHeight(340);
+    list.setPrefHeight(150);
   }
 
   public Object onAction(Object o){

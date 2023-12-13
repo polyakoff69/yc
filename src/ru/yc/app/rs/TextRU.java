@@ -178,6 +178,12 @@ public class TextRU extends ListResourceBundle {
             { "Edit3", "Изменить" },
             { "Move up", "Переместить вверх" },
             { "Move down", "Переместить вниз" },
+            { "Viewer", "Средство просмотра" },
+            { "External viewer", "Внешнее средство просмотра" },
+            { "Command", "Команда" },
+            { "Parameters", "Параметры" },
+            { "Working folder", "Рабочая папка" },
+            { "Environment variables", "Переменные окружения" },
 
             {"ask_quit", "Закрыть Ypsilon Commander?"}
         };
