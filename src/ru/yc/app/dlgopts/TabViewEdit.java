@@ -115,7 +115,7 @@ public class TabViewEdit extends TabBase implements ICallback {
 
     cbxMode = new ComboBox<>();
     pane.add(cbxMode,1,3, 1, 1);
-    GridPane.setMargin(cbxMode, new Insets(10, 8, 10, 6));
+    GridPane.setMargin(cbxMode, new Insets(10, 8, 10, 0));
 
     GridPane pane1 = new GridPane();
     // pane.getStyleClass().add("dlg-tab-container");
@@ -130,24 +130,28 @@ public class TabViewEdit extends TabBase implements ICallback {
 
     edCmd = new TextField();
     pane1.add(edCmd, 1, 0);
+    GridPane.setHgrow(edCmd, Priority.ALWAYS);
 
     lab = new Label(CFG.getTextResource().getString("Parameters")+":");
     pane1.add(lab, 0, 1);
 
     edPar = new TextField();
     pane1.add(edPar, 1, 1);
+    GridPane.setHgrow(edPar, Priority.ALWAYS);
 
-    lab = new Label(CFG.getTextResource().getString("Environment variables")+":");
+    lab = new Label(CFG.getTextResource().getString("Environment variables")+": ");
     pane1.add(lab, 0, 2);
 
     edEnv = new TextField();
     pane1.add(edEnv, 1, 2);
+    GridPane.setHgrow(edEnv, Priority.ALWAYS);
 
     lab = new Label(CFG.getTextResource().getString("Working folder")+":");
     pane1.add(lab, 0, 3);
 
     edDir = new TextField();
     pane1.add(edDir, 1, 3);
+    GridPane.setHgrow(edDir, Priority.ALWAYS);
   }
 
   public void setPrefW(double w){

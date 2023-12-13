@@ -119,7 +119,10 @@
 
 .bordered-titled-title {
     /* -fx-background-color: white; */
-    -fx-translate-y: -16;
+    -fx-translate-y: -10;
+    -fx-translate-x: +6;
+    -fx-opacity: 1.0;
+    -fx-background-color: -fx-base;
 }
 
 .bordered-titled-border {
