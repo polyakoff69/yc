@@ -54,6 +54,10 @@ public class Config {
 
     private int unit = 0; // file size unit 0 = auto / 1 = byte / 2 = Kb
 
+    private java.util.List<FileHandler> editors = new ArrayList<>();
+
+    private java.util.List<FileHandler> viewers = new ArrayList<>();
+
     public Application getApplication() {
         return application;
     }
@@ -223,6 +227,23 @@ public class Config {
     public Map<String, String[]> getTabs(){
         return tabs;
     }
+
+    public List<FileHandler> getEditors() {
+        return editors;
+    }
+
+    public void setEditors(List<FileHandler> editors) {
+        this.editors = editors;
+    }
+
+    public List<FileHandler> getViewers() {
+        return viewers;
+    }
+
+    public void setViewers(List<FileHandler> viewers) {
+        this.viewers = viewers;
+    }
+
 
     public Properties getAllProps(){
         Properties pp = new Properties();

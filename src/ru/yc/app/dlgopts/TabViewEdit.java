@@ -7,6 +7,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import ru.yc.app.Config;
+import ru.yc.app.FileHandler;
 import ru.yc.app.ICallback;
 import ru.yc.app.sys.Os;
 
@@ -15,7 +16,7 @@ import java.util.ResourceBundle;
 public class TabViewEdit extends TabBase implements ICallback {
 
   private Pane thisPane;
-  private ListView<String> list;
+  private ListView<FileHandler> list;
   private ComboBox<String> cbxMode;
   private Label labMode;
   private TextField edCmd, edEnv, edDir, edPar;
@@ -57,7 +58,7 @@ public class TabViewEdit extends TabBase implements ICallback {
     tbAdd.setTooltip(new Tooltip(cfg.getTextResource().getString("Create")));
     Image image = new Image(getClass().getResourceAsStream("/ico_new.png"));
     tbAdd.setGraphic(new ImageView(image));
-    // button.setOnAction(evt -> ctr.onCmd("root_folder", (bLeft ? "left" : "right"), evt));
+    tbAdd.setOnAction(evt -> onAdd());
     tb.getItems().add(tbAdd);
 
     Button tbEdit = new Button("");
@@ -73,7 +74,7 @@ public class TabViewEdit extends TabBase implements ICallback {
     tbDel.setTooltip(new Tooltip(cfg.getTextResource().getString("delete")));
     image = new Image(getClass().getResourceAsStream("/ico_del.png"));
     tbDel.setGraphic(new ImageView(image));
-    // button.setOnAction(evt -> ctr.onCmd("root_folder", (bLeft ? "left" : "right"), evt));
+    tbDel.setOnAction(evt -> onDel());
     tb.getItems().add(tbDel);
 
     Button tbUp = new Button("");
@@ -159,6 +160,22 @@ public class TabViewEdit extends TabBase implements ICallback {
     thisPane.setPrefWidth(w);
     list.setPrefWidth(w);
     list.setPrefHeight(150);
+  }
+
+  public void onAdd(){
+    int ix = list.getSelectionModel().getSelectedIndex();
+    if(ix<0){
+      ix = 0;
+    }
+    list.getItems().add(ix, new FileHandler());
+  }
+
+  public void onDel(){
+    int ix = list.getSelectionModel().getSelectedIndex();
+    if(ix<0){
+      ix = 0;
+    }
+    list.getItems().remove(ix);
   }
 
   public Object onAction(Object o){
