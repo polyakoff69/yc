@@ -177,7 +177,7 @@ public class DlgOptions3 extends Stage {
     cards.put("viewers", tv.buildTab(rs, this, rs.getString("Viewers")));
     mtabs.put("viewers", tv);
 
-    TabViewEdit te = new TabViewEdit();
+    TabViewEdit te = new TabEditors();
     tabs.add(te);
     cards.put("editors", te.buildTab(rs, this, rs.getString("Editors")));
     mtabs.put("editors", te);

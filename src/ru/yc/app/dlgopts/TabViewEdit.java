@@ -1,29 +1,36 @@
 package ru.yc.app.dlgopts;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
+import javafx.util.Pair;
 import javafx.util.StringConverter;
-import javafx.util.converter.DefaultStringConverter;
 import ru.yc.app.Config;
 import ru.yc.app.FileHandler;
 import ru.yc.app.ICallback;
-import ru.yc.app.sys.Os;
 
-import java.io.File;
 import java.util.ResourceBundle;
 
 public class TabViewEdit extends TabBase implements ICallback {
 
   private Pane thisPane;
-  private ListView<FileHandler> list;
-  private ComboBox<String> cbxMode;
+  protected ListView<FileHandler> list;
+  private ComboBox<Option> cbxMode;
   private Label labMode;
   private TextField edCmd, edEnv, edDir, edPar;
+  protected boolean bViewers = true;
 
   public Region buildTab(ResourceBundle rs, DlgOptions parent){
     return null;
@@ -110,20 +117,29 @@ public class TabViewEdit extends TabBase implements ICallback {
     list.setCellFactory(param -> new FHListCell());
 
     buildForm(cfg, pane);
+    // TODO: setAccelerators(pane.getScene());
 
     thisPane = pane;
 
     return pane;
   }
 
-  private void buildForm(Config CFG, GridPane pane){
+  protected void buildForm(Config CFG, GridPane pane){
     labMode = new Label(CFG.getTextResource().getString("Viewer")+": ");
-    pane.add(labMode,0,3, 1, 1);
-    GridPane.setMargin(labMode, new Insets(10, 0, 10, 4));
+    if(bViewers) {
+      pane.add(labMode, 0, 3, 1, 1);
+      GridPane.setMargin(labMode, new Insets(10, 0, 10, 4));
+    }
 
-    cbxMode = new ComboBox<>();
-    pane.add(cbxMode,1,3, 1, 1);
-    GridPane.setMargin(cbxMode, new Insets(10, 8, 10, 0));
+    Option[] oo = new Option[2];
+    oo[0] = new Option("I", CFG.getTextResource().getString("Internal viewer"));
+    oo[1] = new Option("X", CFG.getTextResource().getString("External viewer"));
+    ObservableList<Option> v = FXCollections.observableArrayList(oo);
+    cbxMode = new ComboBox<>(v);
+    if(bViewers) {
+      pane.add(cbxMode, 1, 3, 1, 1);
+      GridPane.setMargin(cbxMode, new Insets(10, 8, 10, 0));
+    }
 
     GridPane pane1 = new GridPane();
     // pane.getStyleClass().add("dlg-tab-container");
@@ -132,6 +148,9 @@ public class TabViewEdit extends TabBase implements ICallback {
     pane1.setVgap(5);
     ru.yc.app.gui.BorderedTitledPane grpPane = new ru.yc.app.gui.BorderedTitledPane(CFG.getTextResource().getString("External viewer"), pane1);
     pane.add(grpPane,0,4, 2, 1);
+    if(!bViewers) {
+      GridPane.setMargin(grpPane, new Insets(10, 0, 0, 0));
+    }
 
     Label lab = new Label(CFG.getTextResource().getString("Command")+":");
     pane1.add(lab, 0, 0);
@@ -160,6 +179,43 @@ public class TabViewEdit extends TabBase implements ICallback {
     edDir = new TextField();
     pane1.add(edDir, 1, 3);
     GridPane.setHgrow(edDir, Priority.ALWAYS);
+  }
+
+  private void setAccelerators(Scene scene) {
+    scene.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+      final KeyCombination keyCombAltUp = new KeyCodeCombination(KeyCode.UP, KeyCombination.ALT_DOWN);
+      final KeyCombination keyCombAltDn = new KeyCodeCombination(KeyCode.DOWN, KeyCombination.ALT_DOWN);
+      final KeyCombination keyCombIns = new KeyCodeCombination(KeyCode.INSERT);
+      final KeyCombination keyCombDel = new KeyCodeCombination(KeyCode.DELETE);
+      final KeyCombination keyCombF4 = new KeyCodeCombination(KeyCode.F4);
+      public void handle(KeyEvent ke) {
+        if (keyCombAltUp.match(ke)) {
+          onUp();
+          ke.consume(); // <-- stops passing the event to next node
+          return;
+        }
+        if (keyCombAltDn.match(ke)) {
+          onDn();
+          ke.consume(); // <-- stops passing the event to next node
+          return;
+        }
+        if (keyCombIns.match(ke)) {
+          onAdd();
+          ke.consume(); // <-- stops passing the event to next node
+          return;
+        }
+        if (keyCombDel.match(ke)) {
+          onDel();
+          ke.consume(); // <-- stops passing the event to next node
+          return;
+        }
+        if (keyCombF4.match(ke)) {
+          onEdit();
+          ke.consume(); // <-- stops passing the event to next node
+          return;
+        }
+      }
+    });
   }
 
   public void setPrefW(double w){
@@ -196,10 +252,26 @@ public class TabViewEdit extends TabBase implements ICallback {
     list.requestFocus();
   }
 
+  public void onUp(){
+
+  }
+
+  public void onDn(){
+
+  }
+
   public Object onAction(Object o){
     return o;
   }
 
+  class Option extends Pair<String, String> {
+    public Option(String x, String s) { super(x, s); }
+
+    @Override
+    public String toString() {
+      return getValue();
+    }
+  }
 }
 
 class FHListCell extends TextFieldListCell<FileHandler> {

@@ -180,6 +180,7 @@ public class TextRU extends ListResourceBundle {
             { "Move down", "Переместить вниз" },
             { "Viewer", "Средство просмотра" },
             { "External viewer", "Внешнее средство просмотра" },
+            { "Internal viewer", "Встроенное средство просмотра" },
             { "Command", "Команда" },
             { "Parameters", "Параметры" },
             { "Working folder", "Рабочая папка" },

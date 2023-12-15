@@ -178,6 +178,7 @@ public class Text extends ListResourceBundle {
             { "Move down", "Move down" },
             { "Viewer", "Viewer" },
             { "External viewer", "External viewer" },
+            { "Internal viewer", "Internal viewer" },
             { "Command", "Command" },
             { "Parameters", "Parameters" },
             { "Working folder", "Working folder" },
