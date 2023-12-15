@@ -1,6 +1,14 @@
 package ru.yc.app;
 
 public class FileHandler {
+
+  public FileHandler(){
+  }
+
+  public FileHandler(String mask){
+    this();
+    setMask(mask);
+  }
   private String mask = "", cmd, param, env, dir;
 
   public String getMask() {

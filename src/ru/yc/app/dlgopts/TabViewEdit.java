@@ -3,14 +3,18 @@ package ru.yc.app.dlgopts;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.util.StringConverter;
+import javafx.util.converter.DefaultStringConverter;
 import ru.yc.app.Config;
 import ru.yc.app.FileHandler;
 import ru.yc.app.ICallback;
 import ru.yc.app.sys.Os;
 
+import java.io.File;
 import java.util.ResourceBundle;
 
 public class TabViewEdit extends TabBase implements ICallback {
@@ -103,6 +107,8 @@ public class TabViewEdit extends TabBase implements ICallback {
     pane.add(list,0,2, 2, 1);
     GridPane.setMargin(list, new Insets(0, 6, 0, 4));
 
+    list.setCellFactory(param -> new FHListCell());
+
     buildForm(cfg, pane);
 
     thisPane = pane;
@@ -169,6 +175,7 @@ public class TabViewEdit extends TabBase implements ICallback {
       ix = 0;
     }
     list.getItems().add(ix, new FileHandler());
+    list.requestFocus();
   }
 
   public void onDel(){
@@ -177,6 +184,7 @@ public class TabViewEdit extends TabBase implements ICallback {
       ix = 0;
     }
     list.getItems().remove(ix);
+    list.requestFocus();
   }
 
   public void onEdit(){
@@ -185,9 +193,44 @@ public class TabViewEdit extends TabBase implements ICallback {
       ix = 0;
     }
     list.edit(ix);
+    list.requestFocus();
   }
 
   public Object onAction(Object o){
     return o;
+  }
+
+}
+
+class FHListCell extends TextFieldListCell<FileHandler> {
+  class Converter extends StringConverter<FileHandler> {
+    @Override
+    public String toString(FileHandler fh) {
+      return fh.toString();
+    }
+    @Override
+    public FileHandler fromString(String string) {
+      if (isEmpty()) {
+        return new FileHandler(string);
+      }
+      FileHandler fh = getItem();
+      fh.setMask(string);
+      return fh;
+    }
+  };
+
+  public FHListCell() {
+    super();
+    refreshConverter();
+  }
+
+  private void refreshConverter() {
+    setConverter(new Converter());
+  }
+
+  @Override
+  public void updateItem(FileHandler item, boolean empty) {
+    super.updateItem(item, empty);
+    refreshConverter();
   }
 }
