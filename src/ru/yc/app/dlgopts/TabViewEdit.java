@@ -66,7 +66,7 @@ public class TabViewEdit extends TabBase implements ICallback {
     tbEdit.setTooltip(new Tooltip(cfg.getTextResource().getString("Edit3")));
     image = new Image(getClass().getResourceAsStream("/ico_edit.png"));
     tbEdit.setGraphic(new ImageView(image));
-    // button.setOnAction(evt -> ctr.onCmd("root_folder", (bLeft ? "left" : "right"), evt));
+    tbEdit.setOnAction(evt -> onEdit());
     tb.getItems().add(tbEdit);
 
     Button tbDel = new Button("");
@@ -99,6 +99,7 @@ public class TabViewEdit extends TabBase implements ICallback {
     GridPane.setMargin(tb, new Insets(0, 6, 0, 4));
 
     list = new ListView<>();
+    list.setEditable(true);
     pane.add(list,0,2, 2, 1);
     GridPane.setMargin(list, new Insets(0, 6, 0, 4));
 
@@ -176,6 +177,14 @@ public class TabViewEdit extends TabBase implements ICallback {
       ix = 0;
     }
     list.getItems().remove(ix);
+  }
+
+  public void onEdit(){
+    int ix = list.getSelectionModel().getSelectedIndex();
+    if(ix<0){
+      ix = 0;
+    }
+    list.edit(ix);
   }
 
   public Object onAction(Object o){
