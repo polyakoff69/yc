@@ -20,7 +20,10 @@ import javafx.util.StringConverter;
 import ru.yc.app.Config;
 import ru.yc.app.FileHandler;
 import ru.yc.app.ICallback;
+import ru.yc.app.util.Str;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 public class TabViewEdit extends TabBase implements ICallback {
@@ -31,6 +34,7 @@ public class TabViewEdit extends TabBase implements ICallback {
   private Label labMode;
   private TextField edCmd, edEnv, edDir, edPar;
   protected boolean bViewers = true;
+  protected Map<String, Option> mOpts = new HashMap<>();
 
   public Region buildTab(ResourceBundle rs, DlgOptions parent){
     return null;
@@ -115,6 +119,13 @@ public class TabViewEdit extends TabBase implements ICallback {
     GridPane.setMargin(list, new Insets(0, 6, 0, 4));
 
     list.setCellFactory(param -> new FHListCell());
+    list.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+      FileHandler selectedItem = (FileHandler)newValue;
+      FileHandler prevItem = (FileHandler)oldValue;
+      onSaveForm(prevItem);
+      onEditForm(selectedItem);
+    });
+
 
     buildForm(cfg, pane);
     // TODO: setAccelerators(pane.getScene());
@@ -132,9 +143,11 @@ public class TabViewEdit extends TabBase implements ICallback {
     }
 
     Option[] oo = new Option[2];
-    oo[0] = new Option("I", CFG.getTextResource().getString("Internal viewer"));
-    oo[1] = new Option("X", CFG.getTextResource().getString("External viewer"));
+    oo[0] = new Option(FileHandler.INTERNAL, CFG.getTextResource().getString("Internal viewer"));
+    oo[1] = new Option(FileHandler.EXTERNAL, CFG.getTextResource().getString("External viewer"));
     ObservableList<Option> v = FXCollections.observableArrayList(oo);
+    // v.stream().map(op -> mOpts.put(op.getKey(), op));
+    v.stream().forEach(op -> mOpts.put(op.getKey(), op));
     cbxMode = new ComboBox<>(v);
     if(bViewers) {
       pane.add(cbxMode, 1, 3, 1, 1);
@@ -230,7 +243,9 @@ public class TabViewEdit extends TabBase implements ICallback {
     if(ix<0){
       ix = 0;
     }
-    list.getItems().add(ix, new FileHandler());
+    FileHandler fh = new FileHandler();
+    fh.setMode(FileHandler.INTERNAL);
+    list.getItems().add(ix, fh);
     list.requestFocus();
   }
 
@@ -258,6 +273,34 @@ public class TabViewEdit extends TabBase implements ICallback {
 
   public void onDn(){
 
+  }
+
+  public void onEditForm(FileHandler ti){
+    edCmd.setText(ti.getCmd());
+    edDir.setText(ti.getDir());
+    edEnv.setText(ti.getEnv());
+    edPar.setText(ti.getParam());
+    if(bViewers){
+      Option op = mOpts.get(ti.getMode());
+      cbxMode.getSelectionModel().select(op);
+    }
+  }
+
+  public void onSaveForm(FileHandler ti){
+    if(ti==null){
+      return;
+    }
+    ti.setCmd(Str.trim(edCmd.getText()));
+    ti.setDir(Str.trim(edDir.getText()));
+    ti.setEnv(Str.trim(edEnv.getText()));
+    ti.setParam(Str.trim(edPar.getText()));
+    if(bViewers){
+      try {
+        ti.setMode(cbxMode.getSelectionModel().getSelectedItem().getKey());
+      }catch (Exception e){
+        System.out.println(e.getMessage()); // TODO:
+      }
+    }
   }
 
   public Object onAction(Object o){

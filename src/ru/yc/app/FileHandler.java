@@ -2,6 +2,8 @@ package ru.yc.app;
 
 public class FileHandler {
 
+  public static final String INTERNAL = "I", EXTERNAL = "X";
+
   public FileHandler(){
   }
 
@@ -9,7 +11,21 @@ public class FileHandler {
     this();
     setMask(mask);
   }
-  private String mask = "", cmd, param, env, dir;
+
+  private String mode = INTERNAL;
+  private String mask = "";
+  private String cmd;
+  private String param = "";
+  private String env = "";
+  private String dir = "";
+
+  public String getMode() {
+    return mode;
+  }
+
+  public void setMode(String mode) {
+    this.mode = mode;
+  }
 
   public String getMask() {
     return mask;
