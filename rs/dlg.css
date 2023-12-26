@@ -136,3 +136,9 @@
 .bordered-titled-content {
     -fx-padding: 10 10 10 10;
 }
+
+/* ====================================================== */
+
+.file-panel-toolbar {
+    -fx-padding: 2 2 2 2;
+}
