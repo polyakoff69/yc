@@ -349,7 +349,9 @@ public class TabViewEdit extends TabBase implements ICallback {
   protected void updateControls(){
     int ix = list.getSelectionModel().getSelectedIndex();
     int sz = list.getItems().size();
+    boolean bSel = false;
     if(ix>=0){
+      bSel = true;
       tbDel.setDisable(false);
       tbEdit.setDisable(false);
       if(ix>0) {
@@ -368,6 +370,12 @@ public class TabViewEdit extends TabBase implements ICallback {
       tbUp.setDisable(true);
       tbDn.setDisable(true);
     }
+
+    edCmd.setDisable(!bSel);
+    edPar.setDisable(!bSel);
+    edEnv.setDisable(!bSel);
+    edDir.setDisable(!bSel);
+    cbxMode.setDisable(!bSel);
   }
 
   public Object onAction(Object o){
