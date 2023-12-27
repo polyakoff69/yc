@@ -33,6 +33,7 @@ public class TabViewEdit extends TabBase implements ICallback {
   private ComboBox<Option> cbxMode;
   private Label labMode;
   private TextField edCmd, edEnv, edDir, edPar;
+  private Button tbAdd, tbEdit, tbDel, tbUp, tbDn;
   protected boolean bViewers = true;
   protected Map<String, Option> mOpts = new HashMap<>();
   protected FileHandler editFH = null;
@@ -69,7 +70,7 @@ public class TabViewEdit extends TabBase implements ICallback {
     tb.getItems().add(p);
     BorderPane.setMargin(labInfo, new Insets(6,4,0,4));
 
-    Button tbAdd = new Button("");
+    tbAdd = new Button("");
     tbAdd.setFocusTraversable(false);
     tbAdd.setTooltip(new Tooltip(cfg.getTextResource().getString("Create")));
     Image image = new Image(getClass().getResourceAsStream("/ico_new.png"));
@@ -77,7 +78,7 @@ public class TabViewEdit extends TabBase implements ICallback {
     tbAdd.setOnAction(evt -> onAdd());
     tb.getItems().add(tbAdd);
 
-    Button tbEdit = new Button("");
+    tbEdit = new Button("");
     tbEdit.setFocusTraversable(false);
     tbEdit.setTooltip(new Tooltip(cfg.getTextResource().getString("Edit3")));
     image = new Image(getClass().getResourceAsStream("/ico_edit.png"));
@@ -85,7 +86,7 @@ public class TabViewEdit extends TabBase implements ICallback {
     tbEdit.setOnAction(evt -> onEdit());
     tb.getItems().add(tbEdit);
 
-    Button tbDel = new Button("");
+    tbDel = new Button("");
     tbDel.setFocusTraversable(false);
     tbDel.setTooltip(new Tooltip(cfg.getTextResource().getString("delete")));
     image = new Image(getClass().getResourceAsStream("/ico_del.png"));
@@ -93,20 +94,20 @@ public class TabViewEdit extends TabBase implements ICallback {
     tbDel.setOnAction(evt -> onDel());
     tb.getItems().add(tbDel);
 
-    Button tbUp = new Button("");
+    tbUp = new Button("");
     tbUp.setFocusTraversable(false);
     tbUp.setTooltip(new Tooltip(cfg.getTextResource().getString("Move up")));
     image = new Image(getClass().getResourceAsStream("/ico_arru.png"));
     tbUp.setGraphic(new ImageView(image));
-    // button.setOnAction(evt -> ctr.onCmd("root_folder", (bLeft ? "left" : "right"), evt));
+    tbUp.setOnAction(evt -> onUp());
     tb.getItems().add(tbUp);
 
-    Button tbDn = new Button("");
+    tbDn = new Button("");
     tbDn.setFocusTraversable(false);
     tbDn.setTooltip(new Tooltip(cfg.getTextResource().getString("Move down")));
     image = new Image(getClass().getResourceAsStream("/ico_arrd.png"));
     tbDn.setGraphic(new ImageView(image));
-    // button.setOnAction(evt -> ctr.onCmd("root_folder", (bLeft ? "left" : "right"), evt));
+    tbDn.setOnAction(evt -> onDn());
     tb.getItems().add(tbDn);
 
     tb.setFocusTraversable(false);
@@ -139,6 +140,8 @@ public class TabViewEdit extends TabBase implements ICallback {
     // TODO: setAccelerators(pane.getScene());
 
     thisPane = pane;
+
+    updateControls();
 
     return pane;
   }
@@ -249,12 +252,13 @@ public class TabViewEdit extends TabBase implements ICallback {
   public void onAdd(){
     int ix = list.getSelectionModel().getSelectedIndex();
     if(ix<0){
-      ix = 0;
+      ix = -1;
     }
     FileHandler fh = new FileHandler();
     fh.setMode(FileHandler.INTERNAL);
-    list.getItems().add(ix, fh);
+    list.getItems().add(ix+1, fh);
     list.requestFocus();
+    updateControls();
   }
 
   public void onDel(){
@@ -264,6 +268,7 @@ public class TabViewEdit extends TabBase implements ICallback {
     }
     list.getItems().remove(ix);
     list.requestFocus();
+    updateControls();
   }
 
   public void onEdit(){
@@ -273,14 +278,36 @@ public class TabViewEdit extends TabBase implements ICallback {
     }
     list.edit(ix);
     list.requestFocus();
+    updateControls();
   }
 
   public void onUp(){
-    // TODO:
+    int ix = list.getSelectionModel().getSelectedIndex();
+    if(ix<1 || list.getItems().size()<2){
+      return;
+    }
+    ObservableList v = list.getItems();
+    Object o1 = v.get(ix);
+    v.remove(ix);
+    v.add(ix-1, o1);
+    list.setItems(v);
+    list.getSelectionModel().select(ix-1);
+    updateControls();
   }
 
   public void onDn(){
-    // TODO:
+    int ix = list.getSelectionModel().getSelectedIndex();
+    int sz = list.getItems().size();
+    if(ix>=(sz-1) || sz<2){
+      return;
+    }
+    ObservableList v = list.getItems();
+    Object o1 = v.get(ix);
+    v.remove(ix);
+    v.add(ix+1, o1);
+    list.setItems(v);
+    list.getSelectionModel().select(ix+1);
+    updateControls();
   }
 
   public void onEditForm(FileHandler ti){
@@ -292,11 +319,13 @@ public class TabViewEdit extends TabBase implements ICallback {
       Option op = mOpts.get(ti.getMode());
       cbxMode.getSelectionModel().select(op);
     }
+    updateControls();
   }
 
   public void onSaveForm(FileHandler ti){
     editFH = ti;
     if(ti==null){
+      updateControls();
       return;
     }
     ti.setCmd(Str.trim(edCmd.getText()));
@@ -310,10 +339,35 @@ public class TabViewEdit extends TabBase implements ICallback {
         System.out.println(e.getMessage()); // TODO:
       }
     }
+    updateControls();
   }
 
-  public void onSaveForm2(){
+  protected void onSaveForm2(){
     onSaveForm(editFH);
+  }
+
+  protected void updateControls(){
+    int ix = list.getSelectionModel().getSelectedIndex();
+    int sz = list.getItems().size();
+    if(ix>=0){
+      tbDel.setDisable(false);
+      tbEdit.setDisable(false);
+      if(ix>0) {
+        tbUp.setDisable(false);
+      }else {
+        tbUp.setDisable(true);
+      }
+      if((ix+1)>=sz) {
+        tbDn.setDisable(true);
+      }else {
+        tbDn.setDisable(false);
+      }
+    }else{
+      tbDel.setDisable(true);
+      tbEdit.setDisable(true);
+      tbUp.setDisable(true);
+      tbDn.setDisable(true);
+    }
   }
 
   public Object onAction(Object o){
