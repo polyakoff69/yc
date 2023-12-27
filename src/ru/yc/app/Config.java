@@ -229,6 +229,9 @@ public class Config {
     }
 
     public List<FileHandler> getEditors() {
+        if(editors==null){
+            editors = new ArrayList<>();
+        }
         return editors;
     }
 
@@ -237,6 +240,9 @@ public class Config {
     }
 
     public List<FileHandler> getViewers() {
+        if(viewers==null){
+            viewers = new ArrayList<>();
+        }
         return viewers;
     }
 
@@ -299,6 +305,29 @@ public class Config {
             } // for
         }// if
 
+        pp.setProperty("viewers", ""+getViewers().size());
+        int i = 0;
+        for (FileHandler fh : getViewers()){
+            pp.setProperty("vwr_cmd."+i, ""+fh.getCmd());
+            pp.setProperty("vwr_dir."+i, ""+fh.getDir());
+            pp.setProperty("vwr_env."+i, ""+fh.getEnv());
+            pp.setProperty("vwr_par."+i, ""+fh.getParam());
+            pp.setProperty("vwr_mask."+i, ""+fh.getMask());
+            pp.setProperty("vwr_mode."+i, ""+fh.getMode());
+            i++;
+        }
+
+        pp.setProperty("editors", ""+getEditors().size());
+        i = 0;
+        for (FileHandler fh : getEditors()){
+            pp.setProperty("edt_cmd."+i, ""+fh.getCmd());
+            pp.setProperty("edt_dir."+i, ""+fh.getDir());
+            pp.setProperty("edt_env."+i, ""+fh.getEnv());
+            pp.setProperty("edt_par."+i, ""+fh.getParam());
+            pp.setProperty("edt_mask."+i, ""+fh.getMask());
+            pp.setProperty("edt_mode."+i, ""+fh.getMode());
+            i++;
+        }
 
         return  pp;
     }
@@ -426,6 +455,34 @@ public class Config {
             tabs.put(pan, v.toArray(new String[v.size()]));
             tabs.put("w"+pan, v1.toArray(new String[v1.size()]));
         } // for
+
+        for(int j=0;j<2;j++) {
+            int cnt = 0;
+            try {
+                cnt = Integer.parseInt(pp.getProperty((j==0 ? "viewers" : "editors"), "0"));
+            } catch (Exception e) {
+                cnt = 0;
+            }
+
+            String id = "vwr";
+            if(j>0){
+                id = "edt";
+            }
+            for (int i = 0; i < cnt; i++) {
+                FileHandler fh = new FileHandler();
+                fh.setCmd(pp.getProperty(id+"_cmd." + i, ""));
+                fh.setDir(pp.getProperty(id+"_dir." + i, ""));
+                fh.setEnv(pp.getProperty(id+"_env." + i, ""));
+                fh.setParam(pp.getProperty(id+"_par." + i, ""));
+                fh.setMask(pp.getProperty(id+"_mask." + i, ""));
+                fh.setMode(pp.getProperty(id+"_mode." + i, ""));
+                if(j==0){
+                    getViewers().add(fh);
+                }else {
+                    getEditors().add(fh);
+                }
+            }
+        }
 
     }
 

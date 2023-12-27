@@ -35,6 +35,7 @@ public class TabViewEdit extends TabBase implements ICallback {
   private TextField edCmd, edEnv, edDir, edPar;
   protected boolean bViewers = true;
   protected Map<String, Option> mOpts = new HashMap<>();
+  protected FileHandler editFH = null;
 
   public Region buildTab(ResourceBundle rs, DlgOptions parent){
     return null;
@@ -126,6 +127,13 @@ public class TabViewEdit extends TabBase implements ICallback {
       onEditForm(selectedItem);
     });
 
+    ObservableList<FileHandler> items;
+    if(bViewers){
+      items = FXCollections.observableArrayList(cfg.getViewers());
+    }else{
+      items = FXCollections.observableArrayList(cfg.getEditors());
+    }
+    list.setItems(items);
 
     buildForm(cfg, pane);
     // TODO: setAccelerators(pane.getScene());
@@ -268,11 +276,11 @@ public class TabViewEdit extends TabBase implements ICallback {
   }
 
   public void onUp(){
-
+    // TODO:
   }
 
   public void onDn(){
-
+    // TODO:
   }
 
   public void onEditForm(FileHandler ti){
@@ -287,6 +295,7 @@ public class TabViewEdit extends TabBase implements ICallback {
   }
 
   public void onSaveForm(FileHandler ti){
+    editFH = ti;
     if(ti==null){
       return;
     }
@@ -303,8 +312,16 @@ public class TabViewEdit extends TabBase implements ICallback {
     }
   }
 
+  public void onSaveForm2(){
+    onSaveForm(editFH);
+  }
+
   public Object onAction(Object o){
-    return o;
+    onSaveForm2();
+    Config cfg = (Config)o;
+    cfg.getViewers().clear();
+    cfg.getViewers().addAll(list.getItems());
+    return cfg;
   }
 
   class Option extends Pair<String, String> {
