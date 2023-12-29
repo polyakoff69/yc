@@ -23,6 +23,7 @@ import ru.yc.app.gui.MsgBox;
 import ru.yc.app.sys.Environ;
 import ru.yc.app.sys.Os;
 import ru.yc.app.util.CfgUtil;
+import ru.yc.app.util.FileHandlerUtil;
 import ru.yc.app.util.FileUtil;
 import ru.yc.app.util.Util;
 
@@ -468,6 +469,33 @@ public abstract class MainFrmCtrl extends MainFrmMenuToolBars {
         }
 
         Platform.runLater(() -> fp.focus());
+    }
+
+    public void onView(Object param) {
+        onViewEdit(param, false);
+    }
+
+    public void onEdit(Object param) {
+        onViewEdit(param, true);
+    }
+
+    public void onViewEdit(Object param, boolean bEdit) {
+        TabPane tab = getActiveTabPane();
+        if(tab==null)
+            return;
+        tab.requestFocus();
+        FilePanel fp = getActivePanel(tab);
+
+        FileData fd = (FileData)fp.getSelectedItem();
+        if(fd==null){
+            return;
+        }
+
+        try {
+            FileHandlerUtil.handleByMask(fd.getFile(), (bEdit ? CFG.getViewers() : CFG.getViewers()), CFG, bEdit);
+        }catch (Exception e){
+            MsgBox.showErrorOk(getClass(), e.getMessage() + ".", CFG.getTextResource().getString("error"), null);
+        }
     }
 
     private String applyMask(String src, String mask){

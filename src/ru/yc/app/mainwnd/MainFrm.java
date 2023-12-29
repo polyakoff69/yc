@@ -199,9 +199,19 @@ public class MainFrm extends MainFrmCtrl {
         });
         scene.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
             final KeyCombination keyComb = new KeyCodeCombination(KeyCode.F2);
+            final KeyCombination keyCombF4 = new KeyCodeCombination(KeyCode.F4);
+            final KeyCombination keyCombF3 = new KeyCodeCombination(KeyCode.F3);
             public void handle(KeyEvent ke) {
                 if (keyComb.match(ke)) {
                     onRename(null);
+                    ke.consume(); // <-- stops passing the event to next node
+                }
+                if (keyCombF3.match(ke)) {
+                    onView(null);
+                    ke.consume(); // <-- stops passing the event to next node
+                }
+                if (keyCombF4.match(ke)) {
+                    onEdit(null);
                     ke.consume(); // <-- stops passing the event to next node
                 }
             }

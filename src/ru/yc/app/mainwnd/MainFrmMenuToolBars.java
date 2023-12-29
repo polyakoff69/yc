@@ -342,6 +342,7 @@ public abstract class MainFrmMenuToolBars extends MainFrmBase {
         button = new Button("F3 "+s);
         button.setFocusTraversable(false);
         button.setTooltip(new Tooltip(s));
+        button.setOnAction(event -> ctr.onCmd("view", null, event));
         tbF3 = button;
         toolBar.getItems().add(button);
 
@@ -349,6 +350,7 @@ public abstract class MainFrmMenuToolBars extends MainFrmBase {
         button = new Button("F4 "+s);
         button.setFocusTraversable(false);
         button.setTooltip(new Tooltip(s));
+        button.setOnAction(event -> ctr.onCmd("edit", null, event));
         tbF4 = button;
         toolBar.getItems().add(button);
 

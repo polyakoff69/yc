@@ -72,6 +72,14 @@ public class Controller implements MainWndController {
         frame.onRename(param);
         return;
       }
+      if("view".equalsIgnoreCase(id)){
+        frame.onView(param);
+        return;
+      }
+      if("edit".equalsIgnoreCase(id)){
+        frame.onEdit(param);
+        return;
+      }
       if("fcopy".equalsIgnoreCase(id) || "fmove".equalsIgnoreCase(id)){
         frame.onCopyMove(id, param);
         return;
